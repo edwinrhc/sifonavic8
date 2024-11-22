@@ -36,4 +36,4 @@ build/
 node_modules
 
 ### application
-application.properties
+application.desa.properties
