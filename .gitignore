@@ -36,5 +36,6 @@ build/
 node_modules
 
 ### application
-!**/src/resources/application.properties
+**/application.properties
+
 
