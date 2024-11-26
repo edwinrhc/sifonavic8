@@ -554,6 +554,10 @@ video {
   display: none;
 }
 
+.right-0 {
+  right: 0px;
+}
+
 .mb-2 {
   margin-bottom: 0.5rem;
 }
@@ -568,6 +572,18 @@ video {
 
 .mb-6 {
   margin-bottom: 1.5rem;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+.mt-3 {
+  margin-top: 0.75rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
 }
 
 .block {

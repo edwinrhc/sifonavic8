@@ -2,14 +2,20 @@ package org.st.gob.pe.sifonavic8.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import javax.sql.DataSource;
+
 
 @Configuration
 @EnableWebSecurity
@@ -17,18 +23,29 @@ public class DatabaseWebSecurity {
 
 
     @Bean
-    public UserDetailsService usersCustom(DataSource dataSource){
+    public UserDetailsService usersCustom(DataSource dataSource) {
 
         JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
-        users.setUsersByUsernameQuery("SELECT USR_D_USUARIO, USR_D_CONTRASENA, USR_C_ESTADO_CUENTA FROM SOPORTE.SFSOP_USUARIO_FONAVI WHERE USR_D_USUARIO = ? ");
-        users.setAuthoritiesByUsernameQuery("SELECT u.USR_D_USUARIO,r.ROL_D_DESCRIPCION FROM SOPORTE.SFSOP_USUARIO_ROL ur "
-                + "INNER JOIN SOPORTE.SFSOP_USUARIO_FONAVI u ON u.USR_C_ID= ur.USR_C_ID "
-                + "INNER JOIN SOPORTE.SFSOP_ROL r ON r.ROL_C_ID = ur.ROL_C_ID "
-                + "WHERE u.USR_D_USUARIO = ? ");
+        // Configuración de consulta de usuarios
+        users.setUsersByUsernameQuery(
+                "SELECT u.USC_D_USUARIO, b.USC_D_PASSWORD_BCRYPT, u.USC_E_REGISTRO " +
+                        "FROM FONAVI.GSEC_USUARIO u " +
+                        "INNER JOIN FONAVI.GSEC_USUARIO_BCRYPT b ON u.USC_C_USUARIO = b.USC_C_USUARIO " +
+                        "WHERE u.USC_D_USUARIO = ?"
+        );
 
+        // Configuración de consulta de roles
+        users.setAuthoritiesByUsernameQuery(
+                "SELECT u.USC_D_USUARIO, r.ROL_D_DESCRIPCION " +
+                        "FROM FONAVI.GSEC_USUARIO_ROL_BCRYPT ur " +
+                        "INNER JOIN FONAVI.GSEC_USUARIO u ON u.USC_C_USUARIO = ur.USC_C_USUARIO " +
+                        "INNER JOIN FONAVI.GSEC_ROL_BCRYPT r ON r.ROL_C_ID = ur.ROL_C_ID " +
+                        "WHERE u.USC_D_USUARIO = ?"
+        );
 
         return users;
     }
+
 
 
 
@@ -36,25 +53,20 @@ public class DatabaseWebSecurity {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf()
+//                .disable()
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .and()
                 .authorizeRequests()
-                .antMatchers("/js/**", "/public/**", "/css/**","DataTables/**","/captcha").permitAll()
-//                .antMatchers("/rol/**", "/usuarios/**", "/equipos/**", "/rolesAsignados/**", "/rol/**"
-//                        ,"/solicitudes/listar","/solicitudes/asignados").hasAnyAuthority("ADMINISTRADOR")
-//                .antMatchers("/", "/solicitudes/verArchivoAdjunto/**").hasAnyAuthority("USUARIO", "ADMINISTRADOR", "ASIGNADO")
-//                .antMatchers("/solicitudes/crear", "/solicitudes/editar/**","/solicitudes/detalle/**").hasAnyAuthority("USUARIO","ADMINISTRADOR","ASIGNADO")
-//                .antMatchers("/solicitudes/listarAsignados","/tipoApp/**,/controlrequerimiento/**").hasAnyAuthority("ASIGNADO","ADMINISTRADOR")
-                .antMatchers("/error","/error/**").permitAll() // Permitir acceso a las páginas de error
-                .anyRequest().authenticated() // Restringe todas las demás rutas a usuarios autenticados
+                .antMatchers(  "/css/**","/error","/error/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
-                // Habilitar autenticación básica HTTP
                 .httpBasic()
                 .and()
-                .formLogin().loginPage("/login")
-                .permitAll()
+                .formLogin()
+                    .loginPage("/login")
+                    .permitAll()
                 .and()
-                .logout().permitAll()
+                    .logout().permitAll()
                 .and()
                 .exceptionHandling().accessDeniedPage("/error_403");
 
@@ -62,3 +74,4 @@ public class DatabaseWebSecurity {
     }
 
 }
+
