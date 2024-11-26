@@ -18,6 +18,8 @@ import java.security.Principal;
 @Controller
 public class LoginController {
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @GetMapping("/login")
     public String login(@RequestParam(value = "error", required = false) String error,
@@ -38,39 +40,32 @@ public class LoginController {
     }
 
 
-//    @PostMapping("/custom-login")
-//    public String loginWithCaptcha(@RequestParam("username") String username,
-//                                   @RequestParam("password") String password,
-////                                   @RequestParam("captcha") String captcha,
-//                                   HttpSession session,
-//                                   Model model) {
-//
-//        // verificamos el catpcha
-////        String sessionCaptcha = (String) session.getAttribute("captcha");
-////
-////        if (sessionCaptcha == null || !sessionCaptcha.equals(captcha)) {
-////            model.addAttribute("error", "Captcha incorrecto. Intente nuevamente.");
-////            return "login";
-////        }
-//
-//        try {
-//            // Intentar autenticar al usuario
-//            Authentication authentication = authenticationManager.authenticate(
-//                    new UsernamePasswordAuthenticationToken(username, password)
-//            );
-//            SecurityContextHolder.getContext().setAuthentication(authentication);
-//
-//            System.out.println("Autenticación exitosa");
-//
-//
-//            // Si la autenticación es exitosa, redirigir al home o dashboard
-//            return "redirect:/home"; // Cambia a la URL de tu home
-//        } catch (Exception e) {
-//            // En caso de error de autenticación
-//            model.addAttribute("error", "Nombre de usuario o contraseña incorrectos.");
-//            return "login";
-//        }
-//
-//    }
+    @PostMapping("/login")
+    public String loginWithCaptcha(@RequestParam("username") String username,
+                                   @RequestParam("password") String password,
+                                   @RequestParam("captcha") String captcha,
+                                   HttpSession session,
+                                   Model model) {
+        String sessionCaptcha = (String) session.getAttribute("captcha");
+        session.removeAttribute("captcha"); // Eliminar el captcha después de usarlo
+
+        if (sessionCaptcha == null || !sessionCaptcha.equalsIgnoreCase(captcha)) {
+            model.addAttribute("error", "Captcha incorrecto. Intente nuevamente.");
+            return "login";
+        }
+
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(username, password)
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            return "redirect:/home";
+        } catch (Exception e) {
+            model.addAttribute("error", "Nombre de usuario o contraseña incorrectos.");
+            return "login";
+        }
+    }
+
 }
 

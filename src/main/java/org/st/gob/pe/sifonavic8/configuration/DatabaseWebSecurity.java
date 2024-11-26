@@ -3,7 +3,9 @@ package org.st.gob.pe.sifonavic8.configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -57,7 +59,7 @@ public class DatabaseWebSecurity {
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .and()
                 .authorizeRequests()
-                .antMatchers(  "/css/**","/error","/error/**").permitAll()
+                .antMatchers(  "/css/**","/error","/error/**","/captcha").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()
@@ -71,6 +73,13 @@ public class DatabaseWebSecurity {
                 .exceptionHandling().accessDeniedPage("/error_403");
 
         return http.build();
+    }
+
+
+    // Registrar AuthenticationManager como un bean
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
 }

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link href="/css/output.css" rel="stylesheet">
+
+</head>
+<body>
+<!-- Navbar -->
+<nav th:fragment="navbar" class="bg-gray-50 p-4">
+    <div class="container mx-auto flex justify-between items-center">
+        <!-- Imagen del logo a la izquierda -->
+        <div class="flex items-center">
+            <a th:href="@{/}">
+            <img th:src="@{/img/stLogo.png}" alt="Logo" class="mr-3"> <!-- Cambia "logo.png" por la ruta a tu logo -->
+           <span class="text-black text-xl font-semibold"></span></a>
+        </div>
+
+        <!-- Enlaces de navegación -->
+        <div class="hidden md:flex space-x-6">
+            <a th:href="@{/cargaCSV/search}" class="text-black hover:text-gray-300">Persona</a>
+<!--            <a th:href="@{/etapaProcesal/view}" class="text-black hover:text-gray-300">Estapa Procesal</a>-->
+<!--            <a th:href="@{/tipoContigencia/view}" class="text-black hover:text-gray-300">Tipo de Contigencia</a>-->
+        </div>
+
+        <!-- Usuario logueado -->
+        <!-- Contenedor del usuario logueado -->
+            <div class="relative">
+                <!-- Imagen y Nombre del Usuario -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="toggleMenu()">
+                    <img th:src="@{/img/people.png}" alt="Usuario" class="h-8 w-8 rounded-full">
+                    <span class="text-black font-medium" sec:authentication="name"></span>
+                </div>
+
+                <!-- Menú desplegable -->
+                <div id="userMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2">
+                    <div class="px-4 py-2">
+                        <p class="text-sm font-bold text-gray-500">Usuario</p>
+                        <p class="text-xs text-gray-500" sec:authentication="name"></p>
+                        <p class="text-sm font-bold text-gray-500">Rol</p>
+                        <p class="text-xs text-gray-500" sec:authentication="principal.authorities"></p>
+                    </div>
+                    <div class="border-t border-gray-200"></div>
+                    <div class="px-4 py-2 flex justify-between space-x-2">
+                        <!-- Botón Configuración -->
+                        <button class="text-blue-600 hover:text-blue-800 font-medium">Ajustes</button>
+
+                        <!-- Botón Cerrar Sesión -->
+                        <form id="logoutForm" th:action="@{/logout}" method="post">
+                        <button class="text-red-600 hover:text-red-800 font-medium" type="submit" onclick="document.getElementById('logoutForm').submit();">Cerrar Sesión</button>
+                            <input type="hidden"  id="csrfToken" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+</nav>
+</body>
+</html>

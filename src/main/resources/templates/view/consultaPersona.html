@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<nav th:replace="fragments/navbar :: navbar"></nav>
+
+<body class="bg-gray-100 flex flex-col min-h-screen">
+<div class="flex-grow container mx-auto p-6 space-y-8">
+    <!-- Título principal -->
+    <h1 class="text-3xl font-bold text-gray-800 text-center mb-8"></h1>
+
+    <!-- Formulario -->
+    <form id="searchForm" class="bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto space-y-6">
+        <h2 class="text-xl font-semibold text-gray-800 text-center mb-4">Buscar Documento</h2>
+
+        <!-- Campos del formulario -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Tipo Documento -->
+            <div>
+                <label for="tipoDocumento" class="block text-sm font-medium text-gray-700 mb-2">Tipo Documento</label>
+                <select
+                        id="tipoDocumento"
+                        name="tipoDocumento"
+                        onchange="validarCampos()"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                    <option value="">Seleccionar</option>
+                    <option value="1">DNI</option>
+                    <option value="2">Carnet de Extranjería</option>
+                    <option value="3">Libreta Electoral (07 dígitos)</option>
+                    <option value="4">Libreta Electoral (08 dígitos)</option>
+                    <option value="5">Carnet de Fuerzas Policiales</option>
+                    <option value="6">Carnet de Fuerzas Armadas</option>
+                    <option value="10">Libreta Tributaria</option>
+                    <option value="15">Pasaporte</option>
+                </select>
+            </div>
+
+            <!-- Número Documento -->
+            <div>
+                <label for="numDocumento" class="block text-sm font-medium text-gray-700 mb-2">Número Documento</label>
+                <input
+                        type="text"
+                        id="numDocumento"
+                        name="numDocumento"
+                        placeholder="Ingresa el número"
+                        onchange="validarCampos()"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+            </div>
+        </div>
+
+        <!-- Botón de búsqueda -->
+        <div class="flex justify-end">
+            <button
+                    type="submit"
+                    id="validarBoton"
+                    class="px-6 py-2 bg-indigo-600 text-white font-medium rounded-md shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                Buscar
+            </button>
+        </div>
+    </form>
+
+    <!-- Tabla -->
+    <div class="overflow-x-auto bg-white p-6 rounded-lg shadow-md max-w-full">
+        <h2 class="text-xl font-semibold text-gray-800 text-center mb-4">Resultados</h2>
+        <table class="min-w-full table-auto border-collapse border border-gray-200">
+            <thead class="bg-gray-50">
+            <tr>
+                <th class="border border-gray-300 px-4 py-2 text-left">Tipo Documento</th>
+                <th class="border border-gray-300 px-4 py-2 text-left">Número Documento</th>
+                <th class="border border-gray-300 px-4 py-2 text-left">Apellido Paterno</th>
+                <th class="border border-gray-300 px-4 py-2 text-left">Apellido Materno</th>
+                <th class="border border-gray-300 px-4 py-2 text-left">Nombres</th>
+                <th class="border border-gray-300 px-4 py-2 text-left">Fecha Nacimiento</th>
+                <th class="border border-gray-300 px-4 py-2 text-left">Sexo</th>
+                <th class="border border-gray-300 px-4 py-2 text-left">Estado Fallecido</th>
+                <th class="border border-gray-300 px-4 py-2 text-left">Fecha Fallecido</th>
+            </tr>
+            </thead>
+            <tbody id="resultsTableBody" class="bg-white">
+            <!-- Los datos serán inyectados aquí dinámicamente -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="/js/consulta/consulta.js"></script>
+<footer th:replace="fragments/footer :: footer" class="bg-gray-800 text-white py-4"></footer>
+</body>
+</html>

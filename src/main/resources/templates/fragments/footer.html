@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<footer th:fragment="footer" class="bg-gray-800 text-white py-4">
+    <p sec:authorize="isAuthenticated()" class="text-center">
+        Usuario Logeado: <span sec:authentication="name"></span> | Roles: <span sec:authentication="principal.authorities"></span>
+    </p>
+    <p sec:authorize="isAuthenticated()" class="text-center text-sm">
+        © <span id="currentYear"></span> Todos los derechos reservados.
+    </p>
+    <p sec:authorize="isAuthenticated()" class="text-center text-sm" th:text="'Secretaría Técnica FONAVI '+${version}">
+<!--        -->
+    </p>
+    <script th:src="@{/public/sweetalert2/sweetalert2.min.js}"></script>
+    <script th:src="@{/public/fontawesome/3f3a8f867c.js}"></script>
+    <script th:src="@{/js/home/home.js}"></script>
+
+
+</footer>
+
+</body>
+
+</html>
