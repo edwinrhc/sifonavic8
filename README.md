@@ -9,7 +9,7 @@
     - **Lenguaje:** Java 17
     - **Framework:** Spring Boot 2.7.13
     - **Seguridad:** Spring Security
-    - **Persistencia:** JPA y JDBC
+    - **Persistencia:** JPA , JDBC , MyBatis
     - **Base de datos:** Oracle JDBC
     - **Utilidades:** Lombok, Spring Boot DevTools
 
@@ -48,4 +48,4 @@
 2. **Construcción del CSS**:
     ```bash
    npm run build:css
-   # ProJu
+   # Sifonavic8
