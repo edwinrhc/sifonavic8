@@ -26,6 +26,11 @@ public class CargaCSVController {
         return "view/consultaPersona";
     }
 
+    @GetMapping("/insert")
+    public String getInsert(){
+        return "view/insertarPersona";
+    }
+
 
 
 

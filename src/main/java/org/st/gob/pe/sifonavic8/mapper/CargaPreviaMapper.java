@@ -13,4 +13,17 @@ public interface CargaPreviaMapper {
             @Param("tipoDocumento") String stipoDoc,
             @Param("numDocumento") String snroDoc);
 
+    void callSpUpdateFechaEstadoFallecidos(
+            @Param("numDocumento") String numDocumento,
+            @Param("fechaFallecido") String fechaFallecido,
+            @Param("usuarioSesion") String usuarioSesion);
+
+    boolean existsByNumeroDocumento(
+            @Param("tipoDocumento") String tipodocumento,
+            @Param("numDocumento") String numDocumento);
+
+    void callSpTmpNuevosInsertarHerederosMasivo(@Param("new_herederosStr") String new_herederosStr);
+
+    void callSpInsertNuevosHerederos();
+
 }

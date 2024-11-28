@@ -38,19 +38,11 @@
           AND PNC_N_NRODOC =
               #{numDocumento,jdbcType=VARCHAR}
     </select>
-<!--
-    &lt;!&ndash; Actualiza las fechas y estado fallecidos &ndash;&gt;
-    &lt;!&ndash;    	<insert id="callSpUpdateFechaEstadoFallecidos" statementType="CALLABLE"  parameterType="pe.gob.mef.st.mpago.domain.dto.CargaFechaFallecidoDTO">&ndash;&gt;
 
-    &lt;!&ndash;    		 { call FONAVI_IUD.SP_RN_ACTUALIZA_FECHA_FALLECIMIENTO(#{numDocumento, mode=IN, jdbcType=VARCHAR},&ndash;&gt;
-    &lt;!&ndash;    		 												  #{fechaFallecido, mode=IN, jdbcType=VARCHAR}&ndash;&gt;
-    &lt;!&ndash;    		 )}&ndash;&gt;
-    &lt;!&ndash;    	</insert>&ndash;&gt;
-
-    &lt;!&ndash; Actualiza las fechas y estado fallecidos &ndash;&gt;
+<!--    Actualiza las fechas y estado fallecidos-->
     <insert id="callSpUpdateFechaEstadoFallecidos" statementType="CALLABLE"
-            parameterType="pe.gob.mef.st.mpago.domain.dto.CargaFechaFallecidoDTO">
-        { call FONAVI_IUD.SP_UPDDEATHDT(
+            parameterType="org.st.gob.pe.sifonavic8.dto.CargaFechaFallecidoDTO">
+        { call FONAVI.SP_UPDDEATHDT(
                 #{numDocumento, mode=IN, jdbcType=VARCHAR},
                 #{fechaFallecido, mode=IN, jdbcType=VARCHAR},
                 #{usuarioSesion, mode=IN, jdbcType=VARCHAR}
@@ -65,47 +57,18 @@
     </select>
 
 
-    <insert id="callSpUpdatePersonaValidaMasiva" statementType="CALLABLE">
-        { call FONAVI_IUD.SP_INSERTVALIDPERSON(#{personasStr, jdbcType=VARCHAR}) }
-    </insert>
 
-    <insert id="callSpProcedureVerificaHeredero" statementType="CALLABLE">
-        { call FONAVI.pck_adm_act_datos_herederos.sp_procedure_verifica_heredero@DBL_MEFFONA() }
-    </insert>
-    &lt;!&ndash; Fin Actualiza las fechas y estado fallecidos &ndash;&gt;
+        <insert id="callSpTmpNuevosInsertarHerederosMasivo" statementType="CALLABLE">
 
-    &lt;!&ndash; Actualiza y Compara Datos Personas en Fon Reniec y Gpec_persona  &ndash;&gt;
-    <insert id="callSpTmpInsertarHerederosMasivo" statementType="CALLABLE">
-        { call FONAVI_IUD.SP_INSERT_H_MASIVO(#{herederosStr, jdbcType=VARCHAR}) }
-    </insert>
-    &lt;!&ndash; Fin Actualiza y Compara Datos Personas en Fon Reniec y Gpec_persona  &ndash;&gt;
-    &lt;!&ndash; Actualiza Datos Personas en Fon Reniec  &ndash;&gt;
-    &lt;!&ndash;    <insert id="callSpActualizaHerederosReniec" statementType="CALLABLE">&ndash;&gt;
-    &lt;!&ndash;        { call fonavi_iud.SP_ACT_HERED_RENIEC@DBL_MEFFONA }&ndash;&gt;
-    &lt;!&ndash;    </insert>    &ndash;&gt;
-    <insert id="callSpActualizaHerederosReniec" statementType="CALLABLE">
-        { call fonavi_iud.SP_ACT_HERED_RENIEC(#{usuarioSesion, mode=IN, jdbcType=VARCHAR}) }
-    </insert>
-    &lt;!&ndash; Fin Actualiza Datos Personas en Fon Reniec  &ndash;&gt;
+            { call FONAVI.SP_INSER_PROC_HERED(#{new_herederosStr, jdbcType=VARCHAR}) }
 
-    &lt;!&ndash; Actualiza Datos Personas en Fon Reniec  &ndash;&gt;
-    <insert id="callSpActualizaHerederosGPEC_Persona" statementType="CALLABLE">
-        { call fonavi_iud.SP_GPE_ACT_HERED_PER }
-    </insert>
-    &lt;!&ndash; Fin Actualiza Datos Personas en Fon Reniec  &ndash;&gt;
+        </insert>
 
+        <insert id="callSpInsertNuevosHerederos" statementType="CALLABLE">
 
-    <insert id="callSpTmpNuevosInsertarHerederosMasivo" statementType="CALLABLE">
+            {call FONAVI.SP_INSERT_N_HERED_MAS }
 
-        { call FONAVI_IUD.SP_INSER_PROC_HERED(#{new_herederosStr, jdbcType=VARCHAR}) }
-
-    </insert>
-
-    <insert id="callSpInsertNuevosHerederos" statementType="CALLABLE">
-
-        {call FONAVI_IUD.SP_INSERT_N_HERED_MAS }
-
-    </insert>-->
+        </insert>
 
 
 </mapper>
