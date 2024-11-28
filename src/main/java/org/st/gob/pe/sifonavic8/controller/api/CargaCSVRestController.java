@@ -6,13 +6,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.st.gob.pe.sifonavic8.common.FileProcessingResult;
+import org.st.gob.pe.sifonavic8.dto.CargaInsertHerederoDTO;
 import org.st.gob.pe.sifonavic8.entity.CargaPrevia;
 import org.st.gob.pe.sifonavic8.mapper.CargaPreviaMapper;
 import org.st.gob.pe.sifonavic8.service.CargaPreviaService;
@@ -64,51 +69,107 @@ public class CargaCSVRestController {
     }
 
 
+
+
+/*    @PostMapping("/cargaInsertDataHedereros")
+    public ResponseEntity<?> handleFileUploadInsertDataHerederos(
+            @RequestParam("file") MultipartFile file,
+            HttpServletRequest request
+    ) {
+        logger.info("Petición recibida para cargar archivo");
+
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("message", "El archivo está vacío"));
+        }
+
+        String usuarioActual = obtenerUsuarioActual(request);
+        if (usuarioActual == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "Usuario no autenticado. Por favor, inicie sesión"));
+        }
+
+        FileProcessingResult result = fileUploadService.processFileInsertHeredero(file, usuarioActual);
+        if (result.hasErrors()) {
+            return ResponseEntity.badRequest()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(result.getErrorResponse());
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(Map.of(
+                        "message", result.getSuccessResponse().get("message"),
+                        "fileName", result.getProcessedFileName(),
+                        "fileUrl", "/api/v1/files/" + result.getProcessedFileName()
+                ));
+
+    }*/
+
+
+
     @PostMapping("/cargaInsertDataHedereros")
     public ResponseEntity<?> handleFileUploadInsertDataHerederos(
             @RequestParam("file") MultipartFile file,
             HttpServletRequest request
-    ){
-      Map<String, String> response = new HashMap<>();
-       if(file.isEmpty()){
-           response.put("message", "El archivo esta vacio");
-           return ResponseEntity.badRequest().body("El archivo esta vacío");
-       }
-       String usuarioActual = obtenerUsuarioActual(request);
-       if(usuarioActual == null){
-           response.put("message","Usuario no autenticado. Por favor, inicie sesión");
-           return ResponseEntity.status(HttpStatus.UNAUTHORIZED).contentType(MediaType.APPLICATION_JSON).body(response);
-       }
+    ) {
+        logger.info("Petición recibida para cargar archivo");
+
+        if (file.isEmpty() || file.getSize() == 0) {
+            return ResponseEntity.badRequest().body(Map.of("status", "error", "message", "El archivo está vacío o no tiene contenido."));
+        }
+
+        String usuarioActual = obtenerUsuarioActual(request);
+        if (usuarioActual == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("status", "error", "message", "Usuario no autenticado. Por favor, inicie sesión"));
+        }
+
         FileProcessingResult result = fileUploadService.processFileInsertHeredero(file, usuarioActual);
-       if(result.hasErrors()){
-           return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON).body(result.getErrorResponse());
-       }
-       return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(result.getSuccessResponse());
+        if (result.hasErrors()) {
+            return ResponseEntity.badRequest()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(Map.of("status", "error", "message", result.getErrorResponse().get("message")));
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(Map.of(
+                        "status", "success",
+                        "message", result.getSuccessResponse().get("message"),
+                        "fileName", result.getProcessedFileName(),
+                        "fileUrl", "/api/v1/cargaCSV/descargarArchivo?fileName=" + result.getProcessedFileName()
+                ));
     }
+
 
     @GetMapping("/descargarArchivo")
     public ResponseEntity<Resource> descargarArchivo(@RequestParam String fileName) throws IOException {
         Path filePath = Paths.get(fileName);
-        if(Files.exists(filePath)){
+        if (Files.exists(filePath)) {
             Resource resource = new InputStreamResource(Files.newInputStream(filePath));
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=" + fileName )
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
                     .contentType(MediaType.TEXT_PLAIN)
                     .body(resource);
-        }else{
+        } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+
     }
 
 
+
+
+
+
+
+
     private String obtenerUsuarioActual(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if(session != null){
-            Object usuario = session.getAttribute("usuario");
-            if(usuario != null){
-                return (String) usuario;
-            }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+            return authentication.getName();
         }
+
         return null;
     }
 

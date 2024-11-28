@@ -7,18 +7,19 @@
 <div class="flex-grow container mx-auto p-6 space-y-8">
     <!-- Título principal -->
     <h1 class="text-3xl font-bold text-gray-800 text-center mb-8"></h1>
-
-    <form method="post" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto space-y-6">
+    <!--            th:action="@{/api/v1/cargaCSV/cargaInsertDataHedereros}" -->
+    <form
+            method="post" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto space-y-6">
         <h2 class="text-xl font-semibold text-gray-800 text-center mb-4">Registrar Persona</h2>
-
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <!-- Input de archivo -->
             <div>
-                <label for="file" class="block text-sm font-medium text-gray-700 mb-2">Seleccionar archivo</label>
+                <label for="fileInput" class="block text-sm font-medium text-gray-700 mb-2">Seleccionar archivo</label>
                 <input
                         type="file"
+                        id="fileInput"
                         name="file"
-                        id="file"
                         accept=".csv"
                         class="mt-2 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
@@ -26,6 +27,7 @@
 
             <!-- Botón para procesar -->
             <div class="flex justify-end">
+<!--                onclick="validarYSubirArchivo();"-->
                 <button
                         type="button"
                         id="insertButton"
@@ -36,6 +38,10 @@
             </div>
         </div>
     </form>
+
+    <div id="downloadContainer" class="text-center mt-4">
+        <!-- Aquí se mostrará el enlace de descarga dinámicamente -->
+    </div>
 </div>
 
 <script src="/js/insertar/insertPersona.js"></script>

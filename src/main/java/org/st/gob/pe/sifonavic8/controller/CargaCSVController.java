@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.st.gob.pe.sifonavic8.entity.CargaPrevia;
 import org.st.gob.pe.sifonavic8.mapper.CargaPreviaMapper;
 import org.st.gob.pe.sifonavic8.service.CargaPreviaService;
@@ -31,11 +32,5 @@ public class CargaCSVController {
         return "view/insertarPersona";
     }
 
-
-
-
-
-
-
-
 }
+

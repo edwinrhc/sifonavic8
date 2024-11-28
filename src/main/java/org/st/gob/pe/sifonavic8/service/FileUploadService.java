@@ -50,6 +50,7 @@ public class FileUploadService {
     }
 
 
+
     public FileProcessingResult processFileFechaFallecido(MultipartFile file, String usuarioActual) {
 
         List<CargaFechaFallecidoDTO> listaDocumentos = new ArrayList<>();
@@ -59,7 +60,7 @@ public class FileUploadService {
         if (usuarioActual == null || usuarioActual.isEmpty()) {
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("message", "Usuario no autenticado. Por favor, inicie sesión.");
-            return new FileProcessingResult(true, errorResponse); // Retornar un error claro
+            return new FileProcessingResult(true, errorResponse,null); // Retornar un error claro
         }
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
@@ -114,7 +115,7 @@ public class FileUploadService {
                 errorResponse.put("message", "Errores encontrados en el archivo. Descargue el archivo de errores.");
                 errorResponse.put("fileName", errorFileName);
 
-                return new FileProcessingResult(true, errorResponse);
+                return new FileProcessingResult(true, errorResponse,errorFileName);
             }
 
 
@@ -140,7 +141,7 @@ public class FileUploadService {
             successResponse.put("message", "El archivo se procesó correctamente. Descargue el archivo de resumen.");
             successResponse.put("fileName", resumenFileName);
 
-            return new FileProcessingResult(false, successResponse);
+            return new FileProcessingResult(false, successResponse,resumenFileName);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -151,10 +152,9 @@ public class FileUploadService {
                 errorMessage = "Error en la ejecución del SP: " + sqlEx.getMessage();
             }
             errorResponse.put("message", errorMessage);
-            return new FileProcessingResult(true, errorResponse);
+            return new FileProcessingResult(true, errorResponse,null);
         }
     }
-
 
     public FileProcessingResult processFileActualizarHeredero(MultipartFile file, String usuarioActual) {
 
@@ -164,7 +164,7 @@ public class FileUploadService {
         if (usuarioActual == null || usuarioActual.isEmpty()) {
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("message", "Usuario no autenticado. Por favor, inicie sesión.");
-            return new FileProcessingResult(true, errorResponse); // Retornar un error claro
+            return new FileProcessingResult(true, errorResponse,null); // Retornar un error claro
         }
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
@@ -206,7 +206,7 @@ public class FileUploadService {
                 errorResponse.put("message", "Errores encontrados en el archivo. Descargue el archivo de errores.");
                 errorResponse.put("fileName", errorFileName);
 
-                return new FileProcessingResult(true, errorResponse);
+                return new FileProcessingResult(true, errorResponse,errorFileName);
             }
 
             // Proceso en bloques de 30
@@ -229,7 +229,7 @@ public class FileUploadService {
             successResponse.put("message", "El archivo se procesó correctamente. Descargue el archivo de resumen.");
             successResponse.put("fileName", resumenFileName);
 
-            return new FileProcessingResult(false, successResponse);
+            return new FileProcessingResult(false, successResponse,resumenFileName);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -241,10 +241,9 @@ public class FileUploadService {
             }
 
             errorResponse.put("message", errorMessage);
-            return new FileProcessingResult(true, errorResponse);
+            return new FileProcessingResult(true, errorResponse,null);
         }
     }
-
 
     public FileProcessingResult processFileInsertHeredero(MultipartFile file, String usuarioActual) {
 
@@ -255,7 +254,7 @@ public class FileUploadService {
         if (usuarioActual == null || usuarioActual.isEmpty()) {
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("message", "Usuario no autenticado. Por favor, inicie sesión.");
-            return new FileProcessingResult(true, errorResponse); // Retornar un error claro
+            return new FileProcessingResult(true, errorResponse,null); // Retornar un error claro
         }
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
             String line;
@@ -305,7 +304,7 @@ public class FileUploadService {
                 errorResponse.put("message", "Errores encontrados en el archivo. Descargue el archivo de errores.");
                 errorResponse.put("fileName", errorFileName);
 
-                return new FileProcessingResult(true, errorResponse);
+                return new FileProcessingResult(true, errorResponse,errorFileName);
             }
 
             int batchSize = 20;
@@ -327,7 +326,7 @@ public class FileUploadService {
             successResponse.put("message", "El archivo se procesó correctamente. Descargue el archivo de resumen.");
             successResponse.put("fileName", resumenFileName);
 
-            return new FileProcessingResult(false, successResponse);
+            return new FileProcessingResult(false, successResponse,resumenFileName);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -338,7 +337,7 @@ public class FileUploadService {
                 errorMessage = "Error en la ejecución del SP: " + sqlEx.getMessage();
             }
             errorResponse.put("message", errorMessage);
-            return new FileProcessingResult(true, errorResponse);
+            return new FileProcessingResult(true, errorResponse,null);
         }
 
     }

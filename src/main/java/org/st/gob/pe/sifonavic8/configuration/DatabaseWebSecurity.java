@@ -3,6 +3,7 @@ package org.st.gob.pe.sifonavic8.configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -59,18 +60,25 @@ public class DatabaseWebSecurity {
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .and()
                 .authorizeRequests()
+                // Recursos públicos
                 .antMatchers(  "/css/**","/error","/error/**","/captcha").permitAll()
+                // Endpoints específicos
+                .antMatchers(HttpMethod.POST, "/api/v1/cargaCSV/cargaInsertDataHedereros").authenticated()
+                // Todas las demás rutas requieren autenticación
                 .anyRequest().authenticated()
                 .and()
-                .httpBasic()
+                .httpBasic() // Solo si necesitas autenticación básica
                 .and()
                 .formLogin()
-                    .loginPage("/login")
+                    .loginPage("/login") // Ruta de la página de inicio de sesión
                     .permitAll()
                 .and()
-                    .logout().permitAll()
+                    .logout()
+                        .logoutSuccessUrl("/login?logout") // Redirige tras cerrar sesión
+                        .permitAll()
                 .and()
-                .exceptionHandling().accessDeniedPage("/error_403");
+                .exceptionHandling()
+                    .accessDeniedPage("/error_403");
 
         return http.build();
     }
