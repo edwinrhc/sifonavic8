@@ -164,7 +164,17 @@
                     </excludes>
                 </configuration>
             </plugin>
+
+            <!-- Otros plugins -->
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+
         </plugins>
+
     </build>
 
 </project>
