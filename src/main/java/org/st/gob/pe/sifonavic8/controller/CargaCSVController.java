@@ -32,5 +32,15 @@ public class CargaCSVController {
         return "view/insertarPersona";
     }
 
+    @GetMapping("/update")
+    public String getUpdate(){
+        return "view/updatePersona";
+    }
+
+    @GetMapping("/updateDeath")
+    public String getupdateDeath(){
+        return "view/updateDeathPersona";
+    }
+
 }
 

@@ -15,21 +15,21 @@
 
     <div class="grid grid-cols-1 gap-4 w-full md:w-1/2 ">
 
-
-        <!-- Consulta -->
+<!--
+        &lt;!&ndash; Consulta &ndash;&gt;
         <div>
             <div class="bg-white p-4 rounded-lg shadow-md flex justify-between items-center"
                  onclick="toggleSection('consulta')" style="cursor: pointer">
-                <!--            <h2 class="text-xl font-bold mb-0">2. MEF.DDO</h2> &lt;!&ndash; Elimina el margen inferior &ndash;&gt;-->
-                <h2 class="text-xl font-bold mb-0">Consulta de persona</h2> <!-- Elimina el margen inferior -->
+                &lt;!&ndash;            <h2 class="text-xl font-bold mb-0">2. MEF.DDO</h2> &lt;!&ndash; Elimina el margen inferior &ndash;&gt;&ndash;&gt;
+                <h2 class="text-xl font-bold mb-0">Consulta de persona</h2> &lt;!&ndash; Elimina el margen inferior &ndash;&gt;
                 <span class="inline-block bg-gray-700 text-white text-sm px-2 py-1 rounded hover:bg-gray-500 transition">
                 <i class="fa-solid fa-arrow-down"></i>
             </span>
             </div>
             <div id="consulta" class="hidden pl-4 mt-2">
-<!--                <h4 class="text-sm font-bold mb-4">Personas</h4>-->
+&lt;!&ndash;                <h4 class="text-sm font-bold mb-4">Personas</h4>&ndash;&gt;
 
-                <div class="flex space-x-1"> <!-- Contenedor flexible para los botones -->
+                <div class="flex space-x-1"> &lt;!&ndash; Contenedor flexible para los botones &ndash;&gt;
                     <a th:href="@{/cargaCSV/search}"
                        class="inline-block bg-gray-700 text-white text-sm px-4 py-2 rounded hover:bg-gray-500 transition">
                         Buscar
@@ -37,21 +37,21 @@
                 </div>
                 <div class="border-t mt-4 border-gray-500 mb-4"></div>
             </div>
-        </div>
+        </div>-->
 
-        <!-- Registrar  Persona GPEC_PERSONA - FON_RENIEC -->
+<!--        &lt;!&ndash; Registrar  Persona GPEC_PERSONA - FON_RENIEC &ndash;&gt;
         <div>
             <div class="bg-white p-4 rounded-lg shadow-md flex justify-between items-center"
                  onclick="toggleSection('registro')" style="cursor: pointer">
-                <!--            <h2 class="text-xl font-bold mb-0">2. MEF.DDO</h2> &lt;!&ndash; Elimina el margen inferior &ndash;&gt;-->
-                <h2 class="text-xl font-bold mb-0">Registro de persona</h2> <!-- Elimina el margen inferior -->
+                &lt;!&ndash;            <h2 class="text-xl font-bold mb-0">2. MEF.DDO</h2> &lt;!&ndash; Elimina el margen inferior &ndash;&gt;&ndash;&gt;
+                <h2 class="text-xl font-bold mb-0">Registro de persona</h2> &lt;!&ndash; Elimina el margen inferior &ndash;&gt;
                 <span class="inline-block bg-gray-700 text-white text-sm px-2 py-1 rounded hover:bg-gray-500 transition">
                 <i class="fa-solid fa-arrow-down"></i>
             </span>
             </div>
             <div id="registro" class="hidden pl-4 mt-2">
-<!--                <h4 class="text-sm font-bold mb-4">Persona</h4>-->
-                <div class="flex space-x-1"> <!-- Contenedor flexible para los botones -->
+&lt;!&ndash;                <h4 class="text-sm font-bold mb-4">Persona</h4>&ndash;&gt;
+                <div class="flex space-x-1"> &lt;!&ndash; Contenedor flexible para los botones &ndash;&gt;
                     <a th:href="@{/cargaCSV/insert}"
                        class="inline-block bg-gray-700 text-white text-sm px-4 py-2 rounded hover:bg-gray-500 transition">
                         Registrar
@@ -59,36 +59,42 @@
                 </div>
                 <div class="border-t mt-4 border-gray-500 mb-4"></div>
             </div>
-        </div>
+        </div>-->
 
 
-        <!-- Actualizar  Persona GPEC_PERSONA - FON_RENIEC -->
+        <!-- Persona GPEC_PERSONA - FON_RENIEC -->
         <div>
-            <div class="bg-white p-4 rounded-lg shadow-md flex justify-between items-center"
-                 onclick="toggleSection('actualizar')" style="cursor: pointer">
-                <!--            <h2 class="text-xl font-bold mb-0">2. MEF.DDO</h2> &lt;!&ndash; Elimina el margen inferior &ndash;&gt;-->
-                <h2 class="text-xl font-bold mb-0">Actualización de persona</h2> <!-- Elimina el margen inferior -->
+            <div class="bg-white p-4 rounded-lg shadow-md flex justify-between items-center" onclick="toggleSection('persona')" style="cursor: pointer">
+                <h2 class="text-xl font-bold mb-0">Persona</h2>
                 <span class="inline-block bg-gray-700 text-white text-sm px-2 py-1 rounded hover:bg-gray-500 transition">
-                <i class="fa-solid fa-arrow-down"></i>
-            </span>
+            <i class="fa-solid fa-arrow-down"></i>
+        </span>
             </div>
-            <div id="actualizar" class="hidden pl-4 mt-2">
-                <!--                <h4 class="text-sm font-bold mb-4">Persona</h4>-->
-                <div class="flex space-x-1 "> <!-- Contenedor flexible para los botones -->
-                    <a th:href="@{/cargaCSV/search}"
+            <div id="persona" class="hidden pl-4 mt-2">
+                <!-- Contenedor flexible para los botones en fila -->
+                <div class="flex space-x-4 pl-4 mt-2">
+                    <a th:href="@{/cargaCSV/search}" target="_blank"
                        class="inline-block bg-gray-700 text-white text-sm px-4 py-2 rounded hover:bg-gray-500 transition">
-                        Fecha Fallecido
+                        Consultar
+                    </a>
+                    <a th:href="@{/cargaCSV/insert}" target="_blank"
+                       class="inline-block bg-gray-700 text-white text-sm px-4 py-2 rounded hover:bg-gray-500 transition">
+                        Registrar
+                    </a>
+                    <a th:href="@{/cargaCSV/update}" target="_blank"
+                       class="inline-block bg-gray-700 text-white text-sm px-4 py-2 rounded hover:bg-gray-500 transition">
+                        Actualizar
+                    </a>
+                    <a th:href="@{/cargaCSV/updateDeath}" target="_blank"
+                       class="inline-block bg-gray-700 text-white text-sm px-4 py-2 rounded hover:bg-gray-500 transition">
+                        Actualizar - Fecha Fallecido
                     </a>
                 </div>
-                <div class="flex space-x-1 mt-2"> <!-- Contenedor flexible para los botones -->
-                    <a th:href="@{/cargaCSV/search}"
-                       class="inline-block bg-gray-700 text-white text-sm px-4 py-2 rounded hover:bg-gray-500 transition">
-                       Datos
-                    </a>
-                </div>
+
                 <div class="border-t mt-4 border-gray-500 mb-4"></div>
             </div>
         </div>
+
 
     </div>
 </div>

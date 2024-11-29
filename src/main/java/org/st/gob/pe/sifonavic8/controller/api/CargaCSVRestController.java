@@ -142,6 +142,12 @@ public class CargaCSVRestController {
     }
 
 
+    @PostMapping("/cargaActualizarDataHedereros")
+    public ResponseEntity<?> handleFileUploadUpdateDateHerederos(){
+
+        return null;
+    }
+
     @GetMapping("/descargarArchivo")
     public ResponseEntity<Resource> descargarArchivo(@RequestParam String fileName) throws IOException {
         Path filePath = Paths.get(fileName);
@@ -156,12 +162,6 @@ public class CargaCSVRestController {
         }
 
     }
-
-
-
-
-
-
 
 
     private String obtenerUsuarioActual(HttpServletRequest request) {
