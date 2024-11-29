@@ -13,6 +13,14 @@ public interface CargaPreviaMapper {
             @Param("tipoDocumento") String stipoDoc,
             @Param("numDocumento") String snroDoc);
 
+//    Insert Persona
+    void callSpTmpNuevosInsertarHerederosMasivo(@Param("new_herederosStr") String new_herederosStr);
+
+    void callSpInsertNuevosHerederos();
+
+//    Fin Persona
+
+//  Actualizar  Fecha Fallecida
     void callSpUpdateFechaEstadoFallecidos(
             @Param("numDocumento") String numDocumento,
             @Param("fechaFallecido") String fechaFallecido,
@@ -22,8 +30,17 @@ public interface CargaPreviaMapper {
             @Param("tipoDocumento") String tipodocumento,
             @Param("numDocumento") String numDocumento);
 
-    void callSpTmpNuevosInsertarHerederosMasivo(@Param("new_herederosStr") String new_herederosStr);
+    void callSpUpdatePersonaValidaMasiva(@Param("personasStr") String personasStr);
+    void callSpProcedureVerificaHeredero();
 
-    void callSpInsertNuevosHerederos();
+//  Fin Actualizar  Fecha Fallecida
+
+    void callSpTmpInsertarHerederosMasivo(@Param("herederosStr") String herederosStr);
+
+    void callSpActualizaHerederosReniec(@Param("usuarioSesion") String usuarioSesion);
+
+    void callSpActualizaHerederosGPEC_Persona();
+
+
 
 }

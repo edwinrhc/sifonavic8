@@ -16,7 +16,7 @@
         <result column="PNC_F_NACIMIEN" property="fechaNacimiento"/>
         <result column="PDD_C_SEXOS" property="sexo"/>
         <result column="PNC_E_VALIDADO_RENIEC" property="estadoFallecido"/>
-        <result column="PNC_F_FALLECIMIEN" property="fechaFacellido"/>
+        <result column="PNC_F_FALLECIMIEN" property="fechaFallecido"/>
 
     </resultMap>
 
@@ -39,7 +39,22 @@
               #{numDocumento,jdbcType=VARCHAR}
     </select>
 
-<!--    Actualiza las fechas y estado fallecidos-->
+
+
+
+
+
+<!--    Insert Personas-->
+    <insert id="callSpTmpNuevosInsertarHerederosMasivo" statementType="CALLABLE">
+        { call FONAVI.SP_INSER_PROC_HERED(#{new_herederosStr, jdbcType=VARCHAR}) }
+    </insert>
+
+    <insert id="callSpInsertNuevosHerederos" statementType="CALLABLE">
+        {call FONAVI.SP_INSERT_N_HERED_MAS }
+    </insert>
+<!--    Fin Insert Personas-->
+
+    <!-- Actualiza las fechas y estado fallecidos -->
     <insert id="callSpUpdateFechaEstadoFallecidos" statementType="CALLABLE"
             parameterType="org.st.gob.pe.sifonavic8.dto.CargaFechaFallecidoDTO">
         { call FONAVI.SP_UPDDEATHDT(
@@ -56,19 +71,27 @@
           AND numero_documento = #{numDocumento}
     </select>
 
+    <insert id="callSpUpdatePersonaValidaMasiva" statementType="CALLABLE">
+        { call FONAVI.SP_INSERTVALIDPERSON(#{personasStr, jdbcType=VARCHAR}) }
+    </insert>
 
+    <insert id="callSpProcedureVerificaHeredero" statementType="CALLABLE">
+        { call FONAVI.pck_adm_act_datos_herederos.sp_procedure_verifica_heredero@DBL_MEFFONA() }
+    </insert>
+    <!-- Fin Actualiza las fechas y estado fallecidos -->
 
-        <insert id="callSpTmpNuevosInsertarHerederosMasivo" statementType="CALLABLE">
+    <!-- Actualiza y Compara Datos Personas en Fon Reniec y Gpec_persona  -->
+    <insert id="callSpTmpInsertarHerederosMasivo" statementType="CALLABLE">
+        { call FONAVI.SP_INSERT_H_MASIVO(#{herederosStr, jdbcType=VARCHAR}) }
+    </insert>
 
-            { call FONAVI.SP_INSER_PROC_HERED(#{new_herederosStr, jdbcType=VARCHAR}) }
+    <insert id="callSpActualizaHerederosReniec" statementType="CALLABLE">
+        { call FONAVI.SP_ACT_HERED_RENIEC( #{usuarioSesion, mode=IN, jdbcType=VARCHAR}) }
+    </insert>
 
-        </insert>
-
-        <insert id="callSpInsertNuevosHerederos" statementType="CALLABLE">
-
-            {call FONAVI.SP_INSERT_N_HERED_MAS }
-
-        </insert>
+    <insert id="callSpActualizaHerederosGPEC_Persona" statementType="CALLABLE">
+        { call FONAVI.SP_GPE_ACT_HERED_PER }
+    </insert>
 
 
 </mapper>

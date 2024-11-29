@@ -54,12 +54,7 @@ async function validarArchivoCSV() {
 
             const header = lines[0].split(";");
             const expectedColumns = [
-                "Tip_Doc",
-                "Num_Doc",
-                "Nombres",
-                "App_Paterno",
-                "App_Materno",
-                "Fecha_nacimiento",
+                "Tipo_Doc", "Doc_Titular", "App_Paterno", "App_Materno", "Nombres", "Fecha_Fallecido"
             ];
 
             if (header.length !== expectedColumns.length) {
@@ -145,7 +140,7 @@ async function uploadFile() {
     formData.append("_csrf", csrfToken);
 
     try {
-        const response = await fetch("/api/v1/cargaCSV/cargaInsertDataHedereros", {
+        const response = await fetch("/api/v1/cargaCSV/cargaActualizarFechaHedereros", {
             method: "POST",
             body: formData,  // Enviamos el FormData con el archivo
         });

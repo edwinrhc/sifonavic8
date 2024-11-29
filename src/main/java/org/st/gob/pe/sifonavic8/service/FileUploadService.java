@@ -105,43 +105,52 @@ public class FileUploadService {
 
             if (errores.length() > 0) {
                 // Crear archivo de errores
-                Path tempDirectory = Files.createTempDirectory("errores");
-                String errorFileName = "errores_" + System.currentTimeMillis() + ".txt";
-                Path errorFilePath = Paths.get(errorFileName);
-
-                Files.write(errorFilePath, errores.toString().getBytes(StandardCharsets.UTF_8));
+//                Path tempDirectory = Files.createTempDirectory("errores");
+//                String errorFileName = "errores_" + System.currentTimeMillis() + ".txt";
+//                Path errorFilePath = Paths.get(errorFileName);
+//
+//                Files.write(errorFilePath, errores.toString().getBytes(StandardCharsets.UTF_8));
+//
+//                Map<String, String> errorResponse = new HashMap<>();
+//                errorResponse.put("message", "Errores encontrados en el archivo. Descargue el archivo de errores.");
+//                errorResponse.put("fileName", errorFileName);
+//
+//                return new FileProcessingResult(true, errorResponse,errorFileName);
 
                 Map<String, String> errorResponse = new HashMap<>();
-                errorResponse.put("message", "Errores encontrados en el archivo. Descargue el archivo de errores.");
-                errorResponse.put("fileName", errorFileName);
+                errorResponse.put("message", "Errores encontrados en el archivo.");
+                errorResponse.put("errors", errores.toString()); // Agregar detalles de los errores
 
-                return new FileProcessingResult(true, errorResponse,errorFileName);
+                return new FileProcessingResult(true, errorResponse, null);
+
             }
 
-
-
             // Proceso en bloques de 80
-            int batchSize = 30;
+            int batchSize = 20;
             int totalRecords = listaDocumentos.size();
             for(int i = 0; i < totalRecords; i+= batchSize){
                 int endIndex = Math.min(i + batchSize, totalRecords);
                 List<CargaFechaFallecidoDTO> subList = listaDocumentos.subList(i, endIndex);
 
                 // Procesar el bloque actual
-//                cargaPreviaService.procesarFechaFallecidoCargarActualizar(listaDocumentos);
-//                cargaPreviaService.procesarCargaActualizaPersonaValidaMasiva(listaDocumentos);
-//                cargaPreviaService.procesarProcedureVerificaHeredero();
+                cargaPreviaService.procesarFechaFallecidoCargarActualizar(listaDocumentos);
+                cargaPreviaService.procesarCargaActualizaPersonaValidaMasiva(listaDocumentos);
+                cargaPreviaService.procesarProcedureVerificaHeredero();
             }
 
-
             // Generar PDF de resumen
-            String resumenFileName = generatePdfSummary(listaDocumentos, usuarioActual);
+            // String resumenFileName = generatePdfSummary(listaDocumentos, usuarioActual);
 
+            //      Map<String, String> successResponse = new HashMap<>();
+            //      successResponse.put("message", "El archivo se procesó correctamente. Descargue el archivo de resumen.");
+            //      successResponse.put("fileName", resumenFileName);
+            //
+            //      return new FileProcessingResult(false, successResponse,resumenFileName);
+
+            // Generar respuesta de éxito sin PDF
             Map<String, String> successResponse = new HashMap<>();
-            successResponse.put("message", "El archivo se procesó correctamente. Descargue el archivo de resumen.");
-            successResponse.put("fileName", resumenFileName);
-
-            return new FileProcessingResult(false, successResponse,resumenFileName);
+            successResponse.put("message", "El archivo se procesó correctamente.");
+            return new FileProcessingResult(false, successResponse, null);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -209,27 +218,33 @@ public class FileUploadService {
                 return new FileProcessingResult(true, errorResponse,errorFileName);
             }
 
-            // Proceso en bloques de 30
-            int batchSize = 30;
+            // Proceso en bloques de 20
+            int batchSize = 20;
             int totalRecords = listaCargaHerederosPersona.size();
             for (int i = 0; i < totalRecords; i += batchSize) {
                 int endIndex = Math.min(i + batchSize, totalRecords); // Determinar el índice final del bloque
                 List<CargaHerederosPersonaDTO> subList = listaCargaHerederosPersona.subList(i, endIndex);
 
                 // Procesar el bloque actual
-//                cargaPreviaService.procesarCargaActualizaHerederosMasiva(subList);
-//                cargaPreviaService.procesarActualizaHerederosReniec(usuarioActual);
-//                cargaPreviaService.procesarActualizaHerederosGPEC_Persona();
+                cargaPreviaService.procesarCargaActualizaHerederosMasiva(subList);
+                cargaPreviaService.procesarActualizaHerederosReniec(usuarioActual);
+                cargaPreviaService.procesarActualizaHerederosGPEC_Persona();
             }
 
             // Generar resumen después de procesar todos los bloques
-            String resumenFileName = generatedPdfSummaryUpdateHeredero(listaCargaHerederosPersona, usuarioActual);
+//            String resumenFileName = generatedPdfSummaryUpdateHeredero(listaCargaHerederosPersona, usuarioActual);
+//
+//            Map<String, String> successResponse = new HashMap<>();
+//            successResponse.put("message", "El archivo se procesó correctamente. Descargue el archivo de resumen.");
+//            successResponse.put("fileName", resumenFileName);
+//
+//            return new FileProcessingResult(false, successResponse,resumenFileName);
 
+            // Generar respuesta de éxito sin PDF
             Map<String, String> successResponse = new HashMap<>();
-            successResponse.put("message", "El archivo se procesó correctamente. Descargue el archivo de resumen.");
-            successResponse.put("fileName", resumenFileName);
+            successResponse.put("message", "El archivo se procesó correctamente.");
 
-            return new FileProcessingResult(false, successResponse,resumenFileName);
+            return new FileProcessingResult(false, successResponse, null);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -245,7 +260,7 @@ public class FileUploadService {
         }
     }
 
-    public FileProcessingResult processFileInsertHeredero(MultipartFile file, String usuarioActual) {
+/*    public FileProcessingResult processFileInsertHeredero(MultipartFile file, String usuarioActual) {
 
         List<CargaInsertHerederoDTO> listaInsertCargaHerederosPersona = new ArrayList<>();
         StringBuilder errores = new StringBuilder();
@@ -320,13 +335,16 @@ public class FileUploadService {
 
 
             // Generar PDF de resumen
-            String resumenFileName = generatedPdfSummaryInsertHeredero(listaInsertCargaHerederosPersona, usuarioActual);
+//            String resumenFileName = generatedPdfSummaryInsertHeredero(listaInsertCargaHerederosPersona, usuarioActual);
 
             Map<String, String> successResponse = new HashMap<>();
-            successResponse.put("message", "El archivo se procesó correctamente. Descargue el archivo de resumen.");
-            successResponse.put("fileName", resumenFileName);
+//            successResponse.put("message", "El archivo se procesó correctamente. Descargue el archivo de resumen.");
+//            successResponse.put("fileName", resumenFileName);
 
-            return new FileProcessingResult(false, successResponse,resumenFileName);
+//            return new FileProcessingResult(false, successResponse,resumenFileName);
+            successResponse.put("message", "El archivo se procesó correctamente.");
+
+            return new FileProcessingResult(false, successResponse, null);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -338,6 +356,96 @@ public class FileUploadService {
             }
             errorResponse.put("message", errorMessage);
             return new FileProcessingResult(true, errorResponse,null);
+        }
+
+    }*/
+
+    public FileProcessingResult processFileInsertHeredero(MultipartFile file, String usuarioActual) {
+
+        List<CargaInsertHerederoDTO> listaInsertCargaHerederosPersona = new ArrayList<>();
+        StringBuilder errores = new StringBuilder();
+
+        // Verificar si el usuarioActual está vacío o es null
+        if (usuarioActual == null || usuarioActual.isEmpty()) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Usuario no autenticado. Por favor, inicie sesión.");
+            return new FileProcessingResult(true, errorResponse, null); // Retornar un error claro
+        }
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
+            String line;
+            boolean isFirstLine = true;
+
+            while ((line = reader.readLine()) != null) {
+                if (isFirstLine) {
+                    isFirstLine = false;
+                    continue;
+                }
+
+                String[] data = line.split(";");
+                if (data.length > 5) {
+                    String tipDocumento = data[0];
+                    String docNumber = data[1];
+                    String nombre = data[2];
+                    String apPaterno = data[3];
+                    String apMaterno = data[4];
+                    String deathDate = data[5];
+                    String regex = "^([0-2][0-9]|(3)[0-1])/((0)[0-9]|(1)[0-2])/\\d{4}$";
+
+                    tipDocumento = validarTipoDocumento(tipDocumento, line, errores);
+                    validarNumeroDocumento(tipDocumento, docNumber, line, errores);
+                    validarNombre(nombre, line, errores);
+                    validarFecha(deathDate, docNumber, line, errores, regex);
+
+                    if (errores.length() > 0) continue;
+
+                    try {
+                        String formattedDeathDate = Constantes.convertDateFormat(deathDate);
+                        CargaInsertHerederoDTO dto = new CargaInsertHerederoDTO(tipDocumento, docNumber, nombre, apPaterno, apMaterno, formattedDeathDate);
+                        listaInsertCargaHerederosPersona.add(dto);
+                    } catch (Exception e) {
+                        errores.append("Error al formatear la fecha en la línea: ").append(line).append("\n");
+                    }
+
+                } else {
+                    errores.append("Datos incompletos: ").append(line).append("\n");
+                }
+            }
+            if (errores.length() > 0) {
+                // En lugar de escribir en un archivo, incluir los errores directamente en la respuesta
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("message", "Errores encontrados en el archivo.");
+                errorResponse.put("errors", errores.toString()); // Agregar detalles de los errores
+
+                return new FileProcessingResult(true, errorResponse, null);
+            }
+
+            int batchSize = 20;
+            int totalRecords = listaInsertCargaHerederosPersona.size();
+            for(int i = 0; i < totalRecords; i += batchSize){
+                int endIndex = Math.min(i + batchSize, totalRecords);
+                List<CargaInsertHerederoDTO> subList = listaInsertCargaHerederosPersona.subList(i, endIndex);
+
+                // Procesar el bloque actual
+                cargaPreviaService.procesarCargaInsertarHerederosMasiva(subList); // Asegúrate de pasar la sublista
+                cargaPreviaService.procesarInsertarHerederos();
+            }
+
+            // Generar respuesta de éxito sin PDF
+            Map<String, String> successResponse = new HashMap<>();
+            successResponse.put("message", "El archivo se procesó correctamente.");
+
+            return new FileProcessingResult(false, successResponse, null);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Map<String, String> errorResponse = new HashMap<>();
+            String errorMessage = "Error interno del servidor";
+            if (e.getCause() instanceof SQLException) {
+                SQLException sqlEx = (SQLException) e.getCause();
+                errorMessage = "Error en la ejecución del SP: " + sqlEx.getMessage();
+            }
+            errorResponse.put("message", errorMessage);
+            return new FileProcessingResult(true, errorResponse, null);
         }
 
     }

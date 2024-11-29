@@ -20,6 +20,6 @@ public class CargaPrevia {
 
     private Date fechaNacimiento;
     private String sexo;
-    private Date fechaFacellido;
+    private Date fechaFallecido;
     private String estadoFallecido;
 }

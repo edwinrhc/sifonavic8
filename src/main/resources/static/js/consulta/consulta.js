@@ -63,6 +63,7 @@
                             `;
                     $('#resultsTableBody').append(row);
                 });
+                console.log(data.consultaPersona);
             },
             error: function (xhr, status, error) {
                 console.error('Error:', error);

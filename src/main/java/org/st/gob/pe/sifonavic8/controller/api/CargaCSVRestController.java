@@ -115,38 +115,126 @@ public class CargaCSVRestController {
         logger.info("Petición recibida para cargar archivo");
 
         if (file.isEmpty() || file.getSize() == 0) {
-            return ResponseEntity.badRequest().body(Map.of("status", "error", "message", "El archivo está vacío o no tiene contenido."));
+            return ResponseEntity.badRequest().body(Map.of(
+                    "status", "error",
+                    "message", "El archivo está vacío o no tiene contenido."
+            ));
         }
 
         String usuarioActual = obtenerUsuarioActual(request);
         if (usuarioActual == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("status", "error", "message", "Usuario no autenticado. Por favor, inicie sesión"));
+                    .body(Map.of(
+                            "status", "error",
+                            "message", "Usuario no autenticado. Por favor, inicie sesión"
+                    ));
         }
 
         FileProcessingResult result = fileUploadService.processFileInsertHeredero(file, usuarioActual);
         if (result.hasErrors()) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("status", "error");
+            errorResponse.put("message", result.getErrorResponse().get("message"));
+            errorResponse.put("errors", result.getErrorResponse().get("errors")); // Agregar detalles de los errores
+
             return ResponseEntity.badRequest()
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(Map.of("status", "error", "message", result.getErrorResponse().get("message")));
+                    .body(errorResponse);
         }
 
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Map.of(
                         "status", "success",
-                        "message", result.getSuccessResponse().get("message"),
-                        "fileName", result.getProcessedFileName(),
-                        "fileUrl", "/api/v1/cargaCSV/descargarArchivo?fileName=" + result.getProcessedFileName()
+                        "message", result.getSuccessResponse().get("message")
                 ));
     }
 
 
-    @PostMapping("/cargaActualizarDataHedereros")
-    public ResponseEntity<?> handleFileUploadUpdateDateHerederos(){
 
-        return null;
+    @PostMapping("/cargaActualizarFechaHedereros")
+    public ResponseEntity<?> handleFileUploadUpdateDateHerederos(
+            @RequestParam("file") MultipartFile file,
+            HttpServletRequest request
+    ){
+        logger.info("Petición recibida para cargar archivo update date");
+
+        if(file.isEmpty()|| file.getSize() == 0){
+            return ResponseEntity.badRequest().body(Map.of(
+               "status","error",
+               "message","El archivo está vacío no tiene contenido."
+            ));
+        }
+        String usuarioActual = obtenerUsuarioActual(request);
+        if(usuarioActual == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of(
+                            "status","error",
+                            "message","Usuario no autenticado. Por favor, inicie sesión"
+                    ));
+        }
+
+        FileProcessingResult result = fileUploadService.processFileFechaFallecido(file,usuarioActual);
+        if(result.hasErrors()){
+            Map<String,String> errorResponse = new HashMap<>();
+            errorResponse.put("status","error");
+            errorResponse.put("message",result.getErrorResponse().get("message"));
+            errorResponse.put("errors",result.getErrorResponse().get("errors")); // Agregar detalles de los errores
+
+            return ResponseEntity.badRequest()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(errorResponse);
+        }
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(Map.of(
+                        "status","success",
+                        "message",result.getSuccessResponse().get("message")
+                ));
     }
+
+
+    @PostMapping("/cargaActualizarHerederos")
+    public ResponseEntity<?> handleFileUploadUpdateHerederos(
+            @RequestParam("file") MultipartFile file,
+            HttpServletRequest request
+    ){
+        logger.info("Petición recibida para cargar archivo update");
+        if(file.isEmpty()|| file.getSize()==0){
+            return ResponseEntity.badRequest().body(Map.of(
+               "status","error",
+               "message","El archivo está vacío no tiene contenido."
+            ));
+        }
+        String usuarioActual = obtenerUsuarioActual(request);
+        if(usuarioActual == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of(
+                            "status","error",
+                            "message","Usuario no autenticado. Por favor, inicie sesión"
+                    ));
+        }
+
+        FileProcessingResult result = fileUploadService.processFileActualizarHeredero(file,usuarioActual);
+        if(result.hasErrors()){
+            Map<String,String> errorResponse = new HashMap<>();
+            errorResponse.put("status","error");
+            errorResponse.put("message",result.getErrorResponse().get("message"));
+            errorResponse.put("errors",result.getErrorResponse().get("errors"));
+
+            return ResponseEntity.badRequest()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(errorResponse);
+        }
+        return  ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(Map.of(
+                        "status","success",
+                        "message",result.getSuccessResponse().get("message")
+                ));
+    }
+
+
 
     @GetMapping("/descargarArchivo")
     public ResponseEntity<Resource> descargarArchivo(@RequestParam String fileName) throws IOException {
@@ -162,7 +250,6 @@ public class CargaCSVRestController {
         }
 
     }
-
 
     private String obtenerUsuarioActual(HttpServletRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
