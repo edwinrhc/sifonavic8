@@ -6,7 +6,7 @@
 ## Tecnologías
 
 - **Backend:**
-    - **Lenguaje:** Java 17
+    - **Lenguaje:** Java 1.8
     - **Framework:** Spring Boot 2.7.13
     - **Seguridad:** Spring Security
     - **Persistencia:** JPA , JDBC , MyBatis
