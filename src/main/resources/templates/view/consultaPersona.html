@@ -81,8 +81,11 @@
         </table>
     </div>
 </div>
-
-<script src="/js/consulta/consulta.js"></script>
+<!-- Definir 'contextPath' usando Thymeleaf -->
+<script th:inline="javascript">
+    var contextPath = /*[[${#httpServletRequest.contextPath}]]*/ '';
+</script>
+<script  th:src="@{/js/consulta/consulta.js}"></script>
 <footer th:replace="fragments/footer :: footer" class="bg-gray-800 text-white py-4"></footer>
 </body>
 </html>

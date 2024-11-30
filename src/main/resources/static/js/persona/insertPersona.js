@@ -101,6 +101,8 @@ async function validarYSubirArchivo() {
 }
 
 async function uploadFile() {
+    console.log('Context Path:', contextPath);
+
     const csrfToken = document.querySelector('input[name="_csrf"]').value;
     const fileInput = document.getElementById("fileInput");
     const file = fileInput.files[0];
@@ -145,7 +147,7 @@ async function uploadFile() {
     formData.append("_csrf", csrfToken);
 
     try {
-        const response = await fetch("/api/v1/cargaCSV/cargaInsertDataHedereros", {
+        const response = await fetch(contextPath+"/api/v1/cargaCSV/cargaInsertDataHedereros", {
             method: "POST",
             body: formData,  // Enviamos el FormData con el archivo
         });

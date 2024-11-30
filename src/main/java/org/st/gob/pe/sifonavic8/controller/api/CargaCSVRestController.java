@@ -69,170 +69,138 @@ public class CargaCSVRestController {
     }
 
 
+ @PostMapping("/cargaInsertDataHedereros")
+ public ResponseEntity<?> handleFileUploadInsertDataHerederos(
+         @RequestParam("file") MultipartFile file,
+         HttpServletRequest request
+ ) {
+     logger.info("Petición recibida para cargar archivo");
 
+     if (file.isEmpty() || file.getSize() == 0) {
+         Map<String, String> responseBody = new HashMap<>();
+         responseBody.put("status", "error");
+         responseBody.put("message", "El archivo está vacío o no tiene contenido.");
 
-/*    @PostMapping("/cargaInsertDataHedereros")
-    public ResponseEntity<?> handleFileUploadInsertDataHerederos(
-            @RequestParam("file") MultipartFile file,
-            HttpServletRequest request
-    ) {
-        logger.info("Petición recibida para cargar archivo");
+         return ResponseEntity.badRequest().body(responseBody);
+     }
 
-        if (file.isEmpty()) {
-            return ResponseEntity.badRequest().body(Map.of("message", "El archivo está vacío"));
-        }
+     String usuarioActual = obtenerUsuarioActual(request);
+     if (usuarioActual == null) {
+         Map<String, String> responseBody = new HashMap<>();
+         responseBody.put("status", "error");
+         responseBody.put("message", "Usuario no autenticado. Por favor, inicie sesión");
 
-        String usuarioActual = obtenerUsuarioActual(request);
-        if (usuarioActual == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("message", "Usuario no autenticado. Por favor, inicie sesión"));
-        }
+         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                 .body(responseBody);
+     }
 
-        FileProcessingResult result = fileUploadService.processFileInsertHeredero(file, usuarioActual);
-        if (result.hasErrors()) {
-            return ResponseEntity.badRequest()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(result.getErrorResponse());
-        }
+     FileProcessingResult result = fileUploadService.processFileInsertHeredero(file, usuarioActual);
+     if (result.hasErrors()) {
+         Map<String, String> errorResponse = new HashMap<>();
+         errorResponse.put("status", "error");
+         errorResponse.put("message", result.getErrorResponse().get("message"));
+         errorResponse.put("errors", result.getErrorResponse().get("errors")); // Agregar detalles de los errores
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(Map.of(
-                        "message", result.getSuccessResponse().get("message"),
-                        "fileName", result.getProcessedFileName(),
-                        "fileUrl", "/api/v1/files/" + result.getProcessedFileName()
-                ));
+         return ResponseEntity.badRequest()
+                 .contentType(MediaType.APPLICATION_JSON)
+                 .body(errorResponse);
+     }
 
-    }*/
+     Map<String, String> successResponse = new HashMap<>();
+     successResponse.put("status", "success");
+     successResponse.put("message", result.getSuccessResponse().get("message"));
 
+     return ResponseEntity.ok()
+             .contentType(MediaType.APPLICATION_JSON)
+             .body(successResponse);
+ }
 
+@PostMapping("/cargaActualizarFechaHedereros")
+public ResponseEntity<?> handleFileUploadUpdateDateHerederos(
+        @RequestParam("file") MultipartFile file,
+        HttpServletRequest request
+){
+    logger.info("Petición recibida para cargar archivo update date");
 
-    @PostMapping("/cargaInsertDataHedereros")
-    public ResponseEntity<?> handleFileUploadInsertDataHerederos(
-            @RequestParam("file") MultipartFile file,
-            HttpServletRequest request
-    ) {
-        logger.info("Petición recibida para cargar archivo");
+    if(file.isEmpty() || file.getSize() == 0){
+        Map<String, String> responseBody = new HashMap<>();
+        responseBody.put("status", "error");
+        responseBody.put("message", "El archivo está vacío no tiene contenido.");
 
-        if (file.isEmpty() || file.getSize() == 0) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "status", "error",
-                    "message", "El archivo está vacío o no tiene contenido."
-            ));
-        }
+        return ResponseEntity.badRequest().body(responseBody);
+    }
+    String usuarioActual = obtenerUsuarioActual(request);
+    if(usuarioActual == null){
+        Map<String, String> responseBody = new HashMap<>();
+        responseBody.put("status", "error");
+        responseBody.put("message", "Usuario no autenticado. Por favor, inicie sesión");
 
-        String usuarioActual = obtenerUsuarioActual(request);
-        if (usuarioActual == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of(
-                            "status", "error",
-                            "message", "Usuario no autenticado. Por favor, inicie sesión"
-                    ));
-        }
-
-        FileProcessingResult result = fileUploadService.processFileInsertHeredero(file, usuarioActual);
-        if (result.hasErrors()) {
-            Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("status", "error");
-            errorResponse.put("message", result.getErrorResponse().get("message"));
-            errorResponse.put("errors", result.getErrorResponse().get("errors")); // Agregar detalles de los errores
-
-            return ResponseEntity.badRequest()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(errorResponse);
-        }
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(Map.of(
-                        "status", "success",
-                        "message", result.getSuccessResponse().get("message")
-                ));
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(responseBody);
     }
 
+    FileProcessingResult result = fileUploadService.processFileFechaFallecido(file, usuarioActual);
+    if(result.hasErrors()){
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("status", "error");
+        errorResponse.put("message", result.getErrorResponse().get("message"));
+        errorResponse.put("errors", result.getErrorResponse().get("errors")); // Agregar detalles de los errores
 
-
-    @PostMapping("/cargaActualizarFechaHedereros")
-    public ResponseEntity<?> handleFileUploadUpdateDateHerederos(
-            @RequestParam("file") MultipartFile file,
-            HttpServletRequest request
-    ){
-        logger.info("Petición recibida para cargar archivo update date");
-
-        if(file.isEmpty()|| file.getSize() == 0){
-            return ResponseEntity.badRequest().body(Map.of(
-               "status","error",
-               "message","El archivo está vacío no tiene contenido."
-            ));
-        }
-        String usuarioActual = obtenerUsuarioActual(request);
-        if(usuarioActual == null){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of(
-                            "status","error",
-                            "message","Usuario no autenticado. Por favor, inicie sesión"
-                    ));
-        }
-
-        FileProcessingResult result = fileUploadService.processFileFechaFallecido(file,usuarioActual);
-        if(result.hasErrors()){
-            Map<String,String> errorResponse = new HashMap<>();
-            errorResponse.put("status","error");
-            errorResponse.put("message",result.getErrorResponse().get("message"));
-            errorResponse.put("errors",result.getErrorResponse().get("errors")); // Agregar detalles de los errores
-
-            return ResponseEntity.badRequest()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(errorResponse);
-        }
-        return ResponseEntity.ok()
+        return ResponseEntity.badRequest()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(Map.of(
-                        "status","success",
-                        "message",result.getSuccessResponse().get("message")
-                ));
+                .body(errorResponse);
+    }
+    Map<String, String> successResponse = new HashMap<>();
+    successResponse.put("status", "success");
+    successResponse.put("message", result.getSuccessResponse().get("message"));
+
+    return ResponseEntity.ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(successResponse);
+}
+
+@PostMapping("/cargaActualizarHerederos")
+public ResponseEntity<?> handleFileUploadUpdateHerederos(
+        @RequestParam("file") MultipartFile file,
+        HttpServletRequest request
+){
+    logger.info("Petición recibida para cargar archivo update");
+    if(file.isEmpty() || file.getSize() == 0){
+        Map<String, String> responseBody = new HashMap<>();
+        responseBody.put("status", "error");
+        responseBody.put("message", "El archivo está vacío no tiene contenido.");
+
+        return ResponseEntity.badRequest().body(responseBody);
+    }
+    String usuarioActual = obtenerUsuarioActual(request);
+    if(usuarioActual == null){
+        Map<String, String> responseBody = new HashMap<>();
+        responseBody.put("status", "error");
+        responseBody.put("message", "Usuario no autenticado. Por favor, inicie sesión");
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(responseBody);
     }
 
+    FileProcessingResult result = fileUploadService.processFileActualizarHeredero(file, usuarioActual);
+    if(result.hasErrors()){
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("status", "error");
+        errorResponse.put("message", result.getErrorResponse().get("message"));
+        errorResponse.put("errors", result.getErrorResponse().get("errors"));
 
-    @PostMapping("/cargaActualizarHerederos")
-    public ResponseEntity<?> handleFileUploadUpdateHerederos(
-            @RequestParam("file") MultipartFile file,
-            HttpServletRequest request
-    ){
-        logger.info("Petición recibida para cargar archivo update");
-        if(file.isEmpty()|| file.getSize()==0){
-            return ResponseEntity.badRequest().body(Map.of(
-               "status","error",
-               "message","El archivo está vacío no tiene contenido."
-            ));
-        }
-        String usuarioActual = obtenerUsuarioActual(request);
-        if(usuarioActual == null){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of(
-                            "status","error",
-                            "message","Usuario no autenticado. Por favor, inicie sesión"
-                    ));
-        }
-
-        FileProcessingResult result = fileUploadService.processFileActualizarHeredero(file,usuarioActual);
-        if(result.hasErrors()){
-            Map<String,String> errorResponse = new HashMap<>();
-            errorResponse.put("status","error");
-            errorResponse.put("message",result.getErrorResponse().get("message"));
-            errorResponse.put("errors",result.getErrorResponse().get("errors"));
-
-            return ResponseEntity.badRequest()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(errorResponse);
-        }
-        return  ResponseEntity.ok()
+        return ResponseEntity.badRequest()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(Map.of(
-                        "status","success",
-                        "message",result.getSuccessResponse().get("message")
-                ));
+                .body(errorResponse);
     }
+    Map<String, String> successResponse = new HashMap<>();
+    successResponse.put("status", "success");
+    successResponse.put("message", result.getSuccessResponse().get("message"));
+
+    return ResponseEntity.ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(successResponse);
+}
 
 
 

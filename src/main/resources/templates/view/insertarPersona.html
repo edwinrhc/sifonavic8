@@ -43,8 +43,10 @@
         <!-- Aquí se mostrará el enlace de descarga dinámicamente -->
     </div>
 </div>
-
-<script src="/js/persona/insertPersona.js"></script>
+<script th:inline="javascript">
+    var contextPath = /*[[${#httpServletRequest.contextPath}]]*/ '';
+</script>
+<script th:src="@{/js/persona/insertPersona.js}"></script>
 <footer th:replace="fragments/footer :: footer" class="bg-gray-800 text-white py-4"></footer>
 </body>
 </html>
