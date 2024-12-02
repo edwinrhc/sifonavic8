@@ -108,12 +108,14 @@ public class DatabaseWebSecurity {
                 .authorizeRequests()
                 // Recursos públicos
                 .antMatchers(
+
                         "/css/**",
                         "/error",
                         "/error/**",
                         "/captcha",
                         "/login",
-                        "/logout"
+                        "/logout",
+                        "/download/**"
                 ).permitAll()
                 // Endpoints específicos
                 .antMatchers(HttpMethod.POST, "/api/v1/cargaCSV/cargaInsertDataHedereros").authenticated()
@@ -132,7 +134,7 @@ public class DatabaseWebSecurity {
                 //     .permitAll()
                 // .and()
                 .exceptionHandling()
-                .accessDeniedPage("/error_403");
+                    .accessDeniedPage("/error/403");
 
         return http.build();
     }

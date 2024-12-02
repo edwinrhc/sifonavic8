@@ -46,18 +46,18 @@
 
 <!--    Insert Personas-->
     <insert id="callSpTmpNuevosInsertarHerederosMasivo" statementType="CALLABLE">
-        { call FONAVI.SP_INSER_PROC_HERED(#{new_herederosStr, jdbcType=VARCHAR}) }
+        { call FONAVI.SP_DDE_INSERT_PROC_HERED(#{new_herederosStr, jdbcType=VARCHAR}) }
     </insert>
 
     <insert id="callSpInsertNuevosHerederos" statementType="CALLABLE">
-        {call FONAVI.SP_INSERT_N_HERED_MAS }
+        {call FONAVI.SP_DDE_INSERT_HER_MAS }
     </insert>
 <!--    Fin Insert Personas-->
 
     <!-- Actualiza las fechas y estado fallecidos -->
     <insert id="callSpUpdateFechaEstadoFallecidos" statementType="CALLABLE"
             parameterType="org.st.gob.pe.sifonavic8.dto.CargaFechaFallecidoDTO">
-        { call FONAVI.SP_UPDDEATHDT(
+        { call FONAVI.SP_DHE_UPDATE_DT(
                 #{numDocumento, mode=IN, jdbcType=VARCHAR},
                 #{fechaFallecido, mode=IN, jdbcType=VARCHAR},
                 #{usuarioSesion, mode=IN, jdbcType=VARCHAR}
@@ -72,7 +72,7 @@
     </select>
 
     <insert id="callSpUpdatePersonaValidaMasiva" statementType="CALLABLE">
-        { call FONAVI.SP_INSERTVALIDPERSON(#{personasStr, jdbcType=VARCHAR}) }
+        { call FONAVI.SP_DPE_INS_VAL_PER(#{personasStr, jdbcType=VARCHAR}) }
     </insert>
 
     <insert id="callSpProcedureVerificaHeredero" statementType="CALLABLE">
@@ -82,15 +82,15 @@
 
     <!-- Actualiza y Compara Datos Personas en Fon Reniec y Gpec_persona  -->
     <insert id="callSpTmpInsertarHerederosMasivo" statementType="CALLABLE">
-        { call FONAVI.SP_INSERT_H_MASIVO(#{herederosStr, jdbcType=VARCHAR}) }
+        { call FONAVI.SP_DHE_INSERT_H_MAS(#{herederosStr, jdbcType=VARCHAR}) }
     </insert>
 
     <insert id="callSpActualizaHerederosReniec" statementType="CALLABLE">
-        { call FONAVI.SP_ACT_HERED_RENIEC( #{usuarioSesion, mode=IN, jdbcType=VARCHAR}) }
+        { call FONAVI.SP_DHE_UP_H_RENIEC( #{usuarioSesion, mode=IN, jdbcType=VARCHAR}) }
     </insert>
 
     <insert id="callSpActualizaHerederosGPEC_Persona" statementType="CALLABLE">
-        { call FONAVI.SP_GPE_ACT_HERED_PER }
+        { call FONAVI.SP_DHE_ACT_HERED_PER }
     </insert>
 
 

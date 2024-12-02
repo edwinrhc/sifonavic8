@@ -1,4 +1,4 @@
-package org.st.gob.pe.sifonavic8.controller.api;
+package org.st.gob.pe.sifonavic8.controller.restController;
 
 
 import org.slf4j.Logger;
@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,7 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.st.gob.pe.sifonavic8.common.FileProcessingResult;
-import org.st.gob.pe.sifonavic8.dto.CargaInsertHerederoDTO;
 import org.st.gob.pe.sifonavic8.entity.CargaPrevia;
 import org.st.gob.pe.sifonavic8.mapper.CargaPreviaMapper;
 import org.st.gob.pe.sifonavic8.service.CargaPreviaService;
