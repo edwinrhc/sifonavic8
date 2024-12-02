@@ -13,10 +13,19 @@ import java.util.Map;
 public class PasswordEncoderConfig {
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    public PasswordEncoder passwordEncoder() {
+        String idForEncode = "MD5"; // Usar MD5 como algoritmo por defecto
+        Map<String, PasswordEncoder> encoders = new HashMap<>();
+        encoders.put("MD5", new MD5PasswordEncoder());
+        // Puedes incluir bcrypt si lo deseas para futuros usos
+        encoders.put("bcrypt", new BCryptPasswordEncoder());
 
+        DelegatingPasswordEncoder delegatingPasswordEncoder = new DelegatingPasswordEncoder(idForEncode, encoders);
+        // Establecer el PasswordEncoder por defecto para contraseñas sin prefijo
+        delegatingPasswordEncoder.setDefaultPasswordEncoderForMatches(new MD5PasswordEncoder());
+
+        return delegatingPasswordEncoder;
+    }
 
 
 }
