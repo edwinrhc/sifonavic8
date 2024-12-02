@@ -108,7 +108,7 @@ public class DatabaseWebSecurity {
                 .authorizeRequests()
                 // Recursos públicos
                 .antMatchers(
-
+                        "/",
                         "/css/**",
                         "/error",
                         "/error/**",

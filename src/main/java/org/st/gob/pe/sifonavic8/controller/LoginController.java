@@ -85,7 +85,7 @@ public class LoginController {
         this.authenticationManager = authenticationManager;
     }
 
-    @GetMapping("/login")
+    @GetMapping({"/","/login"})
     public String login(Model model, @RequestParam(value = "error", required = false) String error) {
         if (error != null) {
             model.addAttribute("error", error);
