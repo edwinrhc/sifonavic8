@@ -58,10 +58,15 @@
         </div>
     </form>
 
+    <!-- Mensaje de no resultados -->
+    <div id="noResultsMessage" class="text-center text-red-500 font-semibold hidden">
+        No se encontraron resultados para los criterios ingresados.
+    </div>
+
     <!-- Tabla -->
-    <div class="overflow-x-auto bg-white p-6 rounded-lg shadow-md max-w-full">
+    <div id="resultsTable"  class="overflow-x-auto bg-white p-6 rounded-lg shadow-md max-w-full hidden">
         <h2 class="text-xl font-semibold text-gray-800 text-center mb-4">Resultados</h2>
-        <table class="min-w-full table-auto border-collapse border border-gray-200">
+        <table  class="min-w-full table-auto border-collapse border border-gray-200">
             <thead class="bg-gray-50">
             <tr>
                 <th class="border border-gray-300 px-4 py-2 text-left">Tipo Documento</th>
