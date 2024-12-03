@@ -23,8 +23,6 @@ import javax.sql.DataSource;
 public class DatabaseWebSecurity {
 
 
-
-
     @Bean
     public UserDetailsService usersCustom(DataSource dataSource) {
 
@@ -59,44 +57,6 @@ public class DatabaseWebSecurity {
         return new ProviderManager(authProvider);
     }
 
-/*
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
-        http
-                .authenticationManager(authenticationManager)
-                .csrf()
-                //                .disable()
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .and()
-                .authorizeRequests()
-                // Recursos públicos
-                .antMatchers( "/css/**",
-                        "/error",
-                        "/error/**",
-                        "/captcha",
-                        "/login",
-                        "/logout").permitAll()
-                // Endpoints específicos
-                .antMatchers(HttpMethod.POST, "/api/v1/cargaCSV/cargaInsertDataHedereros").authenticated()
-                // Todas las demás rutas requieren autenticación
-                .anyRequest().authenticated()
-                .and()
-                .httpBasic() // Solo si necesitas autenticación básica
-                .and()
-                .formLogin()
-                .loginPage("/login") // Ruta de la página de inicio de sesión
-                .permitAll()
-                .and()
-                .logout()
-                .logoutSuccessUrl("/login?logout") // Redirige tras cerrar sesión
-                .permitAll()
-                .and()
-                .exceptionHandling()
-                .accessDeniedPage("/error_403");
-
-        return http.build();
-    }
-*/
 
 
     @Bean
