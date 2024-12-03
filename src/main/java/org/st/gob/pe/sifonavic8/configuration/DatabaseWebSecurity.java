@@ -109,13 +109,16 @@ public class DatabaseWebSecurity {
                 // Recursos públicos
                 .antMatchers(
                         "/",
+                        "/img/**",
+                        "/public/**",
                         "/css/**",
                         "/error",
                         "/error/**",
                         "/captcha",
                         "/login",
                         "/logout",
-                        "/download/**"
+                        "/download/**",
+                        "/api/v1/cargaCSV/search/**"
                 ).permitAll()
                 // Endpoints específicos
                 .antMatchers(HttpMethod.POST, "/api/v1/cargaCSV/cargaInsertDataHedereros").authenticated()
