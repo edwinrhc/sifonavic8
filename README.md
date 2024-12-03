@@ -20,7 +20,7 @@
 
 ## Requisitos
 
-- **Java 17** para la ejecución del proyecto backend.
+- **Java 1.8** para la ejecución del proyecto backend.
 - **Node.js** y **npm** para la gestión de las dependencias frontend y la construcción de CSS.
 
 ## Configuración
