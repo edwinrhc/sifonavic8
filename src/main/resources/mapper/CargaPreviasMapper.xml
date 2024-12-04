@@ -29,7 +29,6 @@
                PNC_D_APEMAT,
                PNC_D_NOMBRES,
                PNC_F_NACIMIEN,
-               PDD_C_SEXOS,
                PNC_E_VALIDADO_RENIEC,
                PNC_F_FALLECIMIEN
         FROM FONAVI.GPEC_PERSONA

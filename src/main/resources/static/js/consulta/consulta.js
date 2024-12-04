@@ -39,6 +39,14 @@ $(document).ready(function () {
         15: "Pasaporte"
     };
 
+    const estadoFallecidoMap = {
+        0: 'VACÍO / NULO',
+        1: 'SIN RESTRICCIÓN',
+        2: 'CON RESTRICCIÓN',
+        3: 'FALLECIMIENTO RENIEC',
+        4: 'FALLECIMIENTO ONP'
+    };
+
     const sexoMap = {
         19: "M",
         20: "F"
@@ -85,8 +93,7 @@ $(document).ready(function () {
                                 <td class="border border-gray-300 px-4 py-2">${persona.apeMaterno}</td>
                                 <td class="border border-gray-300 px-4 py-2">${persona.nombres}</td>
                                 <td class="border border-gray-300 px-4 py-2">${formatDate(persona.fechaNacimiento)}</td>
-                                <td class="border border-gray-300 px-4 py-2">${sexoMap[persona.sexo]}</td>
-                                <td class="border border-gray-300 px-4 py-2">${persona.estadoFallecido ? 'Sí' : 'No'}</td>
+                                <td class="border border-gray-300 px-4 py-2">${estadoFallecidoMap[persona.estadoFallecido]}</td>
                                 <td class="border border-gray-300 px-4 py-2">${persona.fechaFallecido ? formatDate(persona.fechaFallecido) : 'Sin datos'}</td>
                             </tr>
                         `;
