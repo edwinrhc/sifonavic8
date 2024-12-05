@@ -22,6 +22,14 @@ function validarCampos() {
     }
 }
 
+function limpiarInputYValidarCampos() {
+    // Limpia el campo de texto
+    document.getElementById("numDocumento").value = "";
+
+    // Llama a la función de validación
+    validarCampos();
+}
+
 
 $(document).ready(function () {
     console.log('Context Path:', contextPath);
@@ -40,11 +48,12 @@ $(document).ready(function () {
     };
 
     const estadoFallecidoMap = {
-        0: 'VACÍO / NULO',
+        0: 'SIN VALIDAR',
         1: 'SIN RESTRICCIÓN',
         2: 'CON RESTRICCIÓN',
-        3: 'FALLECIMIENTO RENIEC',
-        4: 'FALLECIMIENTO ONP'
+        3: 'FALLECIMIENTO',
+        5: 'VALIDADO MIGRACIONES',
+        6: 'CANCELADO'
     };
 
     const sexoMap = {
