@@ -15,66 +15,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
 
-/*@Controller
-public class LoginController {
-
-
-    private final AuthenticationManager authenticationManager;
-
-
-    @Autowired
-    public LoginController(AuthenticationManager authenticationManager) {
-        this.authenticationManager = authenticationManager;
-    }
-
-    @GetMapping("/login")
-    public String login(@RequestParam(value = "error", required = false) String error,
-                        @RequestParam(value = "logout", required = false) String logout,
-                        Model model, Principal principal, RedirectAttributes flash
-    ) {
-
-        if (error != null) {
-            model.addAttribute("error", error);
-
-        }
-
-        if (logout != null) {
-            flash.addFlashAttribute("info", "Has cerrado sesion con exito");
-            return "redirect:/login";
-        }
-        return "login"; // Nombre de la plantilla Thymeleaf para el formulario de inicio de sesión
-    }
-
-
-    @PostMapping("/login")
-    public String loginWithCaptcha(@RequestParam("username") String username,
-                                   @RequestParam("password") String password,
-                                   @RequestParam("captcha") String captcha,
-                                   HttpSession session,
-                                   Model model) {
-        String sessionCaptcha = (String) session.getAttribute("captcha");
-        session.removeAttribute("captcha"); // Eliminar el captcha después de usarlo
-
-        if (sessionCaptcha == null || !sessionCaptcha.equalsIgnoreCase(captcha)) {
-            model.addAttribute("error", "Captcha incorrecto. Intente nuevamente.");
-            return "login";
-        }
-
-        try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(username, password)
-            );
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            return "redirect:/home";
-        } catch (Exception e) {
-            model.addAttribute("error", "Nombre de usuario o contraseña incorrectos.");
-            return "login";
-        }
-    }
-
-}*/
-
 @Controller
 public class LoginController {
 

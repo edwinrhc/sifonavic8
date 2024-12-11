@@ -48,14 +48,16 @@ public class DatabaseWebSecurity {
 
         return users;
     }
-    @Bean
-    public AuthenticationManager authenticationManager(DataSource dataSource, PasswordEncoder passwordEncoder) {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(usersCustom(dataSource));
-        authProvider.setPasswordEncoder(passwordEncoder);
 
-        return new ProviderManager(authProvider);
-    }
+//    @Bean
+//    public AuthenticationManager authenticationManager(DataSource dataSource, PasswordEncoder passwordEncoder) {
+//        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+//        authProvider.setUserDetailsService(usersCustom(dataSource));
+//        authProvider.setPasswordEncoder(passwordEncoder);
+//
+//        return new ProviderManager(authProvider);
+//    }
+
 
 
 
