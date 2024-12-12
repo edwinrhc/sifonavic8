@@ -112,13 +112,7 @@ public class DatabaseWebSecurity {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    @Bean
-    public FilterRegistrationBean<ForwardedHeaderFilter> forwardedHeaderFilter() {
-        ForwardedHeaderFilter filter = new ForwardedHeaderFilter();
-        FilterRegistrationBean<ForwardedHeaderFilter> registrationBean = new FilterRegistrationBean<>(filter);
-        registrationBean.setOrder(0);
-        return registrationBean;
-    }
+
 
 
 }
