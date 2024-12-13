@@ -67,6 +67,7 @@ public class DatabaseWebSecurity {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf()
+                .ignoringAntMatchers("/api/v1/cargaCSV/**")
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .and()
                 .authorizeRequests()
@@ -82,16 +83,18 @@ public class DatabaseWebSecurity {
                         "/login",
                         "/logout",
                         "/download/**",
-                        "/api/v1/cargaCSV/search/**"
+                        "/api/v1/cargaCSV/**"
                 ).permitAll()
                 // Endpoints específicos
-                .antMatchers(HttpMethod.POST, "/api/v1/cargaCSV/cargaInsertDataHedereros").authenticated()
+//                .antMatchers(HttpMethod.POST, "/api/v1/cargaCSV/cargaInsertDataHedereros").authenticated()
                 // Todas las demás rutas requieren autenticación
                 .anyRequest().authenticated()
                 .and()
+                .formLogin().loginPage("/login")
+                .permitAll()
                 // Elimina o comenta estas líneas:
                 // .httpBasic() // Solo si necesitas autenticación básica
-                // .and()
+                 .and()
                 // .formLogin()
                 //     .loginPage("/login") // Ruta de la página de inicio de sesión
                 //     .permitAll()

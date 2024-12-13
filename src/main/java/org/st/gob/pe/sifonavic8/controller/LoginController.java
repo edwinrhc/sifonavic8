@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
-
+/*
 @Controller
 public class LoginController {
 
@@ -59,4 +59,76 @@ public class LoginController {
             return "redirect:/login";
         }
     }
+}*/
+
+@Controller
+public class LoginController {
+
+    private final AuthenticationManager authenticationManager;
+
+    @Autowired
+    public LoginController(AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
+    }
+
+ /*   @GetMapping({"/", "/login"})
+    public String login(Model model, @RequestParam(value = "error", required = false) String error) {
+        if (error != null) {
+            model.addAttribute("error", "Nombre de usuario o contraseña incorrectos.");
+        }
+        return "login"; // Aquí deberías tener tu vista de login
+    }
+
+    @PostMapping("/login")
+    public String loginWithCaptcha(@RequestParam("username") String username,
+                                   @RequestParam("password") String password,
+                                   @RequestParam("captcha") String captcha,
+                                   HttpSession session,
+                                   RedirectAttributes redirectAttributes) {
+        String sessionCaptcha = (String) session.getAttribute("captcha");
+        session.removeAttribute("captcha"); // Eliminar el captcha después de usarlo
+
+        if (sessionCaptcha == null || !sessionCaptcha.equalsIgnoreCase(captcha)) {
+            redirectAttributes.addFlashAttribute("error", "Captcha incorrecto. Intente nuevamente.");
+            return "redirect:/login";
+        }
+
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(username, password)
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            return "redirect:/home"; // Redirige al home tras un login exitoso
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Nombre de usuario o contraseña incorrectos.");
+            return "redirect:/login";
+        }
+    }*/
+
+
+    @GetMapping({"/","/login"})
+    public String login(@RequestParam(value="error", required = false) String error,
+                        @RequestParam(value="logout", required = false) String logout,
+                        Model model, Principal principal, RedirectAttributes flash
+    ) {
+
+        if(principal != null){
+            flash.addFlashAttribute("info", "Ya ha iniciado sesión anteriormente");
+            return "redirect:/home";
+        }
+
+        if(error != null){
+            model.addAttribute("error","Error en el login:  Nombre de usuario:  o contraseña incorrecta, por favor vuelva a intentarlo");
+
+        }
+
+        if(logout != null){
+            flash.addFlashAttribute("info", "Has cerrado sesion con exito");
+            return "redirect:/login";
+        }
+        return "login"; // Nombre de la plantilla Thymeleaf para el formulario de inicio de sesión
+    }
+
 }
+
