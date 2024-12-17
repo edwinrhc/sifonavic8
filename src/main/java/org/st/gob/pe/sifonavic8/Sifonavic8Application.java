@@ -25,17 +25,11 @@ public class Sifonavic8Application extends SpringBootServletInitializer {
     }
 
 
-    @Bean
-    public FilterRegistrationBean<ForwardedHeaderFilter> forwardedHeaderFilter() {
-        ForwardedHeaderFilter filter = new ForwardedHeaderFilter();
-        FilterRegistrationBean<ForwardedHeaderFilter> registrationBean = new FilterRegistrationBean<>(filter);
-        registrationBean.setOrder(0);
-        return registrationBean;
-    }
+
 
     @Bean
     public FilterRegistrationBean filterLogging() {
-        FilterRegistrationBean registration = new FilterRegistrationBean();
+        FilterRegistrationBean<javax.servlet.Filter> registration = new FilterRegistrationBean<>();
         registration.setFilter((request, response, chain) -> {
             HttpServletRequest req = (HttpServletRequest) request;
             System.out.println("X-Forwarded-Proto: " + req.getHeader("X-Forwarded-Proto"));
@@ -44,6 +38,14 @@ public class Sifonavic8Application extends SpringBootServletInitializer {
         });
         registration.setOrder(-1);
         return registration;
+    }
+
+    @Bean
+    public FilterRegistrationBean<ForwardedHeaderFilter> forwardedHeaderFilter() {
+        FilterRegistrationBean<ForwardedHeaderFilter> filterRegBean = new FilterRegistrationBean<>();
+        filterRegBean.setFilter(new ForwardedHeaderFilter());
+        filterRegBean.setOrder(0);
+        return filterRegBean;
     }
 
 

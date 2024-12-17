@@ -103,8 +103,8 @@ async function validarYSubirArchivo() {
 async function uploadFile() {
     console.log('Context Path:', contextPath);
 
-    const csrfToken = document.querySelector('input[name="_csrf"]').value;
-    const fileInput = document.getElementById("fileInput");
+    // const csrfToken = document.querySelector('input[name="_csrf"]').value;
+    // const fileInput = document.getElementById("fileInput");
     const file = fileInput.files[0];
 
     // Comprobamos si el archivo existe
@@ -144,7 +144,7 @@ async function uploadFile() {
     formData.append("file", file);  // Agregamos el archivo directamente
 
     // También agregamos el token CSRF si es necesario
-    formData.append("_csrf", csrfToken);
+    // formData.append("_csrf", csrfToken);
 
     try {
         const response = await fetch(contextPath+"/api/v1/cargaCSV/cargaInsertDataHedereros", {

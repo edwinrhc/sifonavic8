@@ -8,7 +8,7 @@
 
 <!-- Contenedor principal -->
 <div class="flex-grow container mx-auto p-6">
-
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
     <!-- Mostrar nombre del usuario -->
     <h1 class="text-3xl font-bold mb-6">Bienvenido, <span sec:authentication="name"></span></h1>
 

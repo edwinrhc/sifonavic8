@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -107,7 +108,7 @@ public class LoginController {
     }*/
 
 
-    @GetMapping({"/","/login"})
+    @GetMapping({"/login"})
     public String login(@RequestParam(value="error", required = false) String error,
                         @RequestParam(value="logout", required = false) String logout,
                         Model model, Principal principal, RedirectAttributes flash
@@ -125,9 +126,26 @@ public class LoginController {
 
         if(logout != null){
             flash.addFlashAttribute("info", "Has cerrado sesion con exito");
-            return "redirect:/login";
+            return "redirect:/login"; // Redirige al login después de logout
         }
         return "login"; // Nombre de la plantilla Thymeleaf para el formulario de inicio de sesión
+    }
+
+    // Método para manejar el POST a /login
+    @PostMapping("/login")
+    public String login(@RequestParam("username") String username,
+                        @RequestParam("password") String password,
+                        RedirectAttributes redirectAttributes) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(username, password)
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);  // Establece el contexto de seguridad
+            return "redirect:/home";  // Redirige al home si el login es exitoso
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Nombre de usuario o contraseña incorrectos.");
+            return "redirect:/login";  // Redirige a la página de login con un error si la autenticación falla
+        }
     }
 
 }

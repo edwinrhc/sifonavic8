@@ -1,13 +1,9 @@
 package org.st.gob.pe.sifonavic8.configuration;
 
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,14 +11,21 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.web.filter.ForwardedHeaderFilter;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.st.gob.pe.sifonavic8.component.CustomAuthenticationSuccessHandler;
 
 import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
 public class DatabaseWebSecurity {
+
+    @Autowired
+    private AuthenticationSuccessHandler successHandler;
+
+    @Autowired
+    private LogoutSuccessHandler logoutSuccessHandler;
 
 
     @Bean
@@ -37,43 +40,31 @@ public class DatabaseWebSecurity {
                         "WHERE USC_D_USUARIO = ? AND PDD_C_TIPUSR = 427"
         );
 
-        // Configuración de consulta de roles
-/*        users.setAuthoritiesByUsernameQuery(
-                "SELECT u.USC_D_USUARIO, r.ROL_D_DESCRIPCION " +
-                        "FROM FONAVI.GSEC_USUARIO_ROL_BCRYPT ur " +
-                        "INNER JOIN FONAVI.GSEC_USUARIO u ON u.USC_C_USUARIO = ur.USC_C_USUARIO " +
-                        "INNER JOIN FONAVI.GSEC_ROL_BCRYPT r ON r.ROL_C_ID = ur.ROL_C_ID " +
-                        "WHERE u.USC_D_USUARIO = ?"
-        );*/
         // Configuración de rol estático
         users.setAuthoritiesByUsernameQuery("SELECT ?, 'ROLE_USER' FROM DUAL");
 
         return users;
     }
 
-//    @Bean
-//    public AuthenticationManager authenticationManager(DataSource dataSource, PasswordEncoder passwordEncoder) {
-//        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-//        authProvider.setUserDetailsService(usersCustom(dataSource));
-//        authProvider.setPasswordEncoder(passwordEncoder);
-//
-//        return new ProviderManager(authProvider);
-//    }
-
-
-
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf()
-                .ignoringAntMatchers("/api/v1/cargaCSV/**")
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .and()
+                .csrf().disable()
+
+        //                .requiresChannel()
+        //                .anyRequest()
+        //                .requiresSecure()
+        //                .and()
+//                .ignoringAntMatchers("/api/v1/cargaCSV/**")
+//                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+//                .and()
                 .authorizeRequests()
+//                .antMatchers("/sifonavic8/", "/sifonavic8/login", "/sifonavic8/logout", "/sifonavic8/error", "/sifonavic8/css/**", "/sifonavic8/img/**")
+//                .permitAll() // Permitir acceso público a estas rutas
                 // Recursos públicos
                 .antMatchers(
-                        "/",
+
                         "/img/**",
                         "/public/**",
                         "/css/**",
@@ -81,33 +72,34 @@ public class DatabaseWebSecurity {
                         "/error/**",
                         "/captcha",
                         "/login",
-                        "/logout",
+                        "/logout/**",
                         "/download/**",
                         "/api/v1/cargaCSV/**"
                 ).permitAll()
                 // Endpoints específicos
 //                .antMatchers(HttpMethod.POST, "/api/v1/cargaCSV/cargaInsertDataHedereros").authenticated()
                 // Todas las demás rutas requieren autenticación
-                .anyRequest().authenticated()
+                    .anyRequest()
+                    .authenticated()
                 .and()
-                .formLogin().loginPage("/login")
-                .permitAll()
-                // Elimina o comenta estas líneas:
-                // .httpBasic() // Solo si necesitas autenticación básica
+                .formLogin()
+//                .loginPage("/sifonavic8/login")  // URL de la página de login
+                    .loginPage("/login")  // URL de la página de login
+                    .failureUrl("/login?error")  // Redirigir en caso de error
+                    .successHandler(successHandler)  // Usar el manejador de éxito personalizado
+                    .permitAll()
                  .and()
-                // .formLogin()
-                //     .loginPage("/login") // Ruta de la página de inicio de sesión
-                //     .permitAll()
-                // .and()
-                // .logout()
-                //     .logoutSuccessUrl("/login?logout") // Redirige tras cerrar sesión
-                //     .permitAll()
-                // .and()
+                    .logout()
+                    .logoutUrl("/logout")
+                    .logoutSuccessHandler(logoutSuccessHandler)  // Usar el manejador de logout personalizado
+                    .permitAll()
+                .and()
                 .exceptionHandling()
                     .accessDeniedPage("/error/403");
 
         return http.build();
     }
+
 
     // Registrar AuthenticationManager como un bean
     @Bean

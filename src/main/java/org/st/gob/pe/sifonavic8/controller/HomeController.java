@@ -11,7 +11,7 @@ import java.security.Principal;
 @Controller
 public class HomeController {
 
-    @GetMapping({ "/home"})
+    @GetMapping({ "/","/home"})
     public String home(Model model, Principal principal, Authentication authentication){
         String usuarioLogeado = ((UserDetails) authentication.getPrincipal()).getUsername();
         String username = principal.getName();

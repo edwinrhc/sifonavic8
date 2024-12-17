@@ -113,6 +113,11 @@ public class CargaCSVRestController {
              .body(successResponse);
  }
 
+ @PostMapping("/nuevo")
+ public ResponseEntity<?> handleFileUploadInsertDataHerederos(){
+     return new ResponseEntity<>("ok", HttpStatus.OK);
+ }
+
 @PostMapping("/cargaActualizarFechaHedereros")
 public ResponseEntity<?> handleFileUploadUpdateDateHerederos(
         @RequestParam("file") MultipartFile file,

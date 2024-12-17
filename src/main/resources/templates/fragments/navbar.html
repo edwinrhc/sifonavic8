@@ -51,7 +51,7 @@
                         <!-- Botón Cerrar Sesión -->
                         <form id="logoutForm" th:action="@{/logout}" method="post">
                         <button class="text-red-600 hover:text-red-800 font-medium" type="submit" onclick="document.getElementById('logoutForm').submit();">Cerrar Sesión</button>
-                            <input type="hidden"  id="csrfToken" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+<!--                            <input type="hidden"  id="csrfToken" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
                         </form>
                     </div>
 
