@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Enlaces a CSS y otros recursos -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css">
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+</head>
+<body class="bg-blue-100 flex items-center justify-center min-h-screen">
+<div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
+    <!-- Título principal -->
+    <h2 class="text-3xl font-bold text-center text-gray-700 mb-6">Sistema de Procesos Heredero</h2>
+    <div class="flex flex-col md:flex-row">
+        <!-- Imagen a la izquierda -->
+        <div class="flex-1 flex items-center justify-center mb-6 md:mb-0">
+            <img th:src="@{/img/banner_fonavi.png}" alt="Imagen descriptiva" class="w-64 h-32">
+        </div>
+        <!-- Formulario a la derecha -->
+        <div class="flex-1">
+            <!-- Fieldset con leyenda -->
+            <fieldset class="border border-gray-300 p-6 rounded-md">
+                <legend class="text-2xl font-bold text-blue-600 px-2">
+                    Iniciar Sesión
+                </legend>
+                <form method="post"  th:action="@{/sifonavic8/login}">
+<!--                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />-->
+                    <div th:if="${error != null}">
+                        <p class="text-red-500 text-sm text-center" th:text="${error}"></p>
+                    </div>
+                    <!-- Campo de Usuario -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+                            Usuario
+                        </label>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                               id="username" type="text" placeholder="Ingrese su usuario" name="username">
+                    </div>
+                    <!-- Campo de Contraseña -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
+                            Contraseña
+                        </label>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                               id="password" type="password" placeholder="Ingrese su contraseña" name="password">
+                    </div>
+
+                    <!-- Captcha -->
+<!--                    <div class="mb-6">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">
+                            Captcha
+                        </label>
+                        <div class="flex flex-wrap items-center">
+                            <img id="captchaImage" th:src="@{/captcha}" alt="Captcha" class="rounded shadow-md cursor-pointer" onclick="reloadCaptcha()" />
+                            <input class="shadow appearance-none border rounded mt-2 ml-0 md:mt-0 md:ml-4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full md:w-32"
+                                   type="text" name="captcha" placeholder="Ab2cEw" required>
+                        </div>
+                    </div>-->
+
+                    <!-- Botón de Iniciar Sesión -->
+                    <div class="flex items-center justify-end">
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                type="submit" id="btn_ingresar">
+                            Iniciar Sesión
+                        </button>
+                    </div>
+                </form>
+            </fieldset>
+        </div>
+    </div>
+    <!-- Pie de página -->
+    <p class="text-center text-sm mt-4" th:text="'Secretaría Técnica FONAVI ' + ${version}"></p>
+</div>
+<!-- Script para recargar el captcha -->
+<script>
+    function reloadCaptcha() {
+        const captchaImage = document.getElementById('captchaImage');
+        captchaImage.src = '/captcha?' + new Date().getTime();
+    }
+</script>
+</body>
+</html>

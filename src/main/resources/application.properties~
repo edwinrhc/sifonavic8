@@ -4,13 +4,8 @@ application.version=v1.0.0
 
 server.port=8092
 spring.datasource.url=jdbc:oracle:thin:@10.0.13.218:1526:sifodesa
-spring.datasource.username=
-spring.datasource.password=
-
-server.forward-headers-strategy=framework
-server.use-forward-headers=true
-server.servlet.context-path=/sifonavic8
-spring.mvc.pathmatch.matching-strategy=ant-path-matcher
+spring.datasource.username=fonavi
+spring.datasource.password=desarrollo
 
 
 spring.jpa.hibernate.ddl-auto=update
@@ -23,7 +18,7 @@ logging.level.org.springframework.security=DEBUG
 logging.level.org.springframework.web=DEBUG
 logging.level.root=DEBUG
 
-app.external.base-url=https://www.fonavi-st.gob.pe/sifonavic8
+
 
 #Export PDF
 spring.mvc.contentnegotiation.favor-parameter=true
@@ -33,12 +28,10 @@ spring.mvc.contentnegotiation.media-types.pdf = application/pdf
 mybatis.mapper-locations=classpath:mapper/*.xml
 
 
-#app.external.base-url=https://www.fonavi-st.gob.pe/sifonavic8
-
-
 #server.error.whitelabel.enabled=false
 
 #spring.mvc.throw-exception-if-no-handler-found=true
 #spring.web.resources.add-mappings=false
-
+#app.external.base-url=https://www.fonavi-st.gob.pe/sifonavic8
+app.external.base-url=http://localhost:8080
 

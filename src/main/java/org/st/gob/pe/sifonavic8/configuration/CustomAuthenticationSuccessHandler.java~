@@ -1,0 +1,4 @@
+package org.st.gob.pe.sifonavic8.configuration;
+
+public class CustomAuthenticationSuccessHandler {
+}

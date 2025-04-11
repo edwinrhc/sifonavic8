@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/head :: head"></head>
+
+<body class="bg-gray-100 flex flex-col min-h-screen">
+
+<nav th:replace="fragments/navbar :: navbar"></nav>
+
+<!-- Contenedor principal -->
+<div class="flex-grow container mx-auto p-6">
+
+    <!-- Mostrar nombre del usuario -->
+    <h1 class="text-3xl font-bold mb-6">Bienvenido, <span sec:authentication="name"></span></h1>
+
+    <div class="grid grid-cols-1 gap-4 w-full md:w-1/2 ">
+
+        <!-- Persona GPEC_PERSONA - FON_RENIEC -->
+        <div>
+            <div class="bg-white p-4 rounded-lg shadow-md flex justify-between items-center" onclick="toggleSection('persona')" style="cursor: pointer">
+                <h2 class="text-xl font-bold mb-0">Persona</h2>
+                <span class="inline-block bg-gray-700 text-white text-sm px-2 py-1 rounded hover:bg-gray-500 transition">
+                    <i class="fa-solid fa-arrow-down"></i>
+                </span>
+            </div>
+            <div id="persona" class="hidden pl-4 mt-2">
+                <!-- Contenedor flexible para los botones en fila -->
+                <div class="flex space-x-4 pl-4 mt-2">
+                    <a th:href="@{/cargaCSV/search}"
+                       class="inline-block bg-gray-700 text-white text-sm px-4 py-2 rounded hover:bg-gray-500 transition">
+                        Consultar
+                    </a>
+                    <a th:href="@{/cargaCSV/insert}"
+                       class="inline-block bg-gray-700 text-white text-sm px-4 py-2 rounded hover:bg-gray-500 transition">
+                        Registrar
+                    </a>
+
+                    <!-- Botón Toggle Dropdown -->
+                    <div class="relative inline-block">
+                        <button onclick="toggleDropdown('dropdownActualizar')"
+                                class="inline-block bg-gray-700 text-white text-sm px-4 py-2 rounded hover:bg-gray-500 transition">
+                            Actualizar
+                            <i class="fa-solid fa-caret-down ml-2"></i>
+                        </button>
+                        <!-- Dropdown Menu -->
+                        <div id="dropdownActualizar" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg hidden">
+                            <a th:href="@{/cargaCSV/update}"
+                               class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-t-lg">Datos</a>
+                            <a th:href="@{/cargaCSV/updateDeath}"
+                               class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-b-lg">Fecha Fallecida</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-t mt-4 border-gray-500 mb-4"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<footer th:replace="fragments/footer :: footer" class="bg-gray-800 text-white py-4"></footer>
+
+<!-- Script para Toggle -->
+<script>
+    // Mostrar/Ocultar Sección
+    function toggleSection(sectionId) {
+        const section = document.getElementById(sectionId);
+        section.classList.toggle('hidden');
+    }
+
+    // Mostrar/Ocultar Dropdown
+    function toggleDropdown(dropdownId) {
+        const dropdown = document.getElementById(dropdownId);
+        dropdown.classList.toggle('hidden');
+    }
+</script>
+
+</body>
+</html>

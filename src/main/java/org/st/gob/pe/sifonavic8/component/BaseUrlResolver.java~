@@ -1,0 +1,27 @@
+package org.st.gob.pe.sifonavic8.component;
+
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+//@Component
+//public class BaseUrlResolver {
+//
+//    @Value("${app.external.base-url}")
+//    private String externalBaseUrl;
+//
+//    public String getExternalBaseUrl() {
+//        return externalBaseUrl;
+//    }
+//
+//    public String buildUrl(String path){
+//        // Asegura que no haya duplicación de '/' al concatenar
+//        if(externalBaseUrl.endsWith("/") && path.startsWith("/")){
+//            return externalBaseUrl + path.substring(1);
+//        } else if(!externalBaseUrl.endsWith("/") && !path.startsWith("/")) {
+//            return externalBaseUrl + "/" + path;
+//        } else {
+//            return externalBaseUrl + path;
+//        }
+//    }
+//}
